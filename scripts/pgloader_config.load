@@ -1,0 +1,22 @@
+LOAD DATABASE
+     FROM mysql://usuario:senha@localhost:3306/gestao_psi
+     INTO postgresql://gestao_psi_user:gestao_psi_pass@localhost:5432/gestao_psi
+
+WITH include drop, create tables, create indexes, reset sequences
+
+SET work_mem to '256MB', maintenance_work_mem to '512 MB'
+
+CAST type datetime to timestamp drop default drop not null,
+     type date to date drop default drop not null,
+     type tinyint to boolean using tinyint-to-boolean,
+     type int to integer,
+     type bigint to bigint,
+     type decimal to numeric,
+     type varchar to text,
+     type text to text
+
+BEFORE LOAD DO
+$$ ALTER SCHEMA public RENAME TO public_backup; $$,
+$$ CREATE SCHEMA public; $$,
+$$ GRANT ALL ON SCHEMA public TO gestao_psi_user; $$,
+$$ GRANT ALL ON SCHEMA public TO public; $$;
