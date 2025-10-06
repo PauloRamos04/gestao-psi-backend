@@ -1,0 +1,9 @@
+[phases.setup]
+nixPkgs = ["...", "openjdk21"]
+
+[phases.build]
+cmds = ["./mvnw clean package -DskipTests -Dmaven.compiler.source=21 -Dmaven.compiler.target=21"]
+
+[start]
+cmd = "java -Dserver.port=$PORT -jar target/gestao-psi-backend-1.0.0.jar"
+
