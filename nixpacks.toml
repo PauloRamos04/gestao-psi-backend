@@ -2,7 +2,11 @@
 nixPkgs = ["...", "openjdk21"]
 
 [phases.build]
-cmds = ["./mvnw clean package -DskipTests"]
+cmds = [
+  "chmod +x mvnw",
+  "./mvnw clean compile -DskipTests",
+  "./mvnw package -DskipTests"
+]
 
 [start]
 cmd = "java -Dserver.port=$PORT -jar target/gestao-psi-backend-1.0.0.jar"
