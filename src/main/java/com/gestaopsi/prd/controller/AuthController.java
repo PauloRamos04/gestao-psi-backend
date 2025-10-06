@@ -52,9 +52,16 @@ public class AuthController {
                 response.setToken(token);
                 response.setUserId(usuario.getId());
                 response.setUsername(usuario.getUsername());
-                response.setClinicaId(usuario.getClinicaId().longValue());
-                response.setPsicologId(usuario.getPsicologId().longValue());
-                response.setTipoUser(String.valueOf(usuario.getTipoId()));
+                // Evitar NPE: ler IDs diretamente das relações com null-check
+                response.setClinicaId(
+                        usuario.getClinica() != null ? usuario.getClinica().getId() : null
+                );
+                response.setPsicologId(
+                        usuario.getPsicologo() != null ? usuario.getPsicologo().getId() : null
+                );
+                response.setTipoUser(
+                        usuario.getTipo() != null ? String.valueOf(usuario.getTipo().getId()) : null
+                );
                 response.setClinicaNome(
                         usuario.getClinica() != null ? usuario.getClinica().getNome() : null
                 );
@@ -68,6 +75,7 @@ public class AuthController {
                 return ResponseEntity.status(401).build();
             }
         } catch (Exception e) {
+            log.error("Erro ao realizar login", e);
             return ResponseEntity.status(500).build();
         }
     }
