@@ -9,7 +9,7 @@ cmds = [
 ]
 
 [start]
-cmd = "java -Xmx512m -Dspring.profiles.active=prod -Dserver.port=$PORT -jar target/gestao-psi-backend-1.0.0.jar"
+cmd = "java -Xmx512m -Dspring.profiles.active=prod -Dserver.address=0.0.0.0 -jar target/gestao-psi-backend-1.0.0.jar"
 
 [variables]
 MAVEN_OPTS = "-Xmx512m"
