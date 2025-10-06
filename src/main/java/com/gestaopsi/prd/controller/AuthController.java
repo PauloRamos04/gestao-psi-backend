@@ -28,6 +28,12 @@ public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
 
+    @GetMapping("/health")
+    @Operation(summary = "Health check")
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("OK");
+    }
+
     @PostMapping("/login")
     @Operation(summary = "Realizar login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
