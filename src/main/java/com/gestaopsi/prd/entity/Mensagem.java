@@ -1,19 +1,29 @@
 package com.gestaopsi.prd.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mensagens")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Mensagem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "titulo", nullable = false)
+    @Column(name = "titulo", nullable = false, length = 200)
     private String titulo;
 
-    @Column(name = "conteudo", columnDefinition = "TEXT")
+    @Column(name = "conteudo", nullable = false, columnDefinition = "TEXT")
     private String conteudo;
 
     @Column(name = "data_criacao", nullable = false)
@@ -22,14 +32,10 @@ public class Mensagem {
     @Column(name = "status", nullable = false)
     private Boolean status = true;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-    public String getConteudo() { return conteudo; }
-    public void setConteudo(String conteudo) { this.conteudo = conteudo; }
-    public LocalDateTime getDataCriacao() { return dataCriacao; }
-    public void setDataCriacao(LocalDateTime dataCriacao) { this.dataCriacao = dataCriacao; }
-    public Boolean getStatus() { return status; }
-    public void setStatus(Boolean status) { this.status = status; }
+    @PrePersist
+    protected void onCreate() {
+        if (dataCriacao == null) {
+            dataCriacao = LocalDateTime.now();
+        }
+    }
 }

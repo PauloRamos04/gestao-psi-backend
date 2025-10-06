@@ -1,48 +1,72 @@
 package com.gestaopsi.prd.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "pagamentos")
+@Table(name = "pagamentos", indexes = {
+    @Index(name = "idx_pagamentos_data", columnList = "data"),
+    @Index(name = "idx_pagamentos_paciente", columnList = "paciente_id")
+})
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pagamento {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "clinica_id", nullable = false)
-    private Integer clinicaId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "clinica_id", nullable = false)
+    private Clinica clinica;
 
-    @Column(name = "psicolog_id", nullable = false)
-    private Integer psicologId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "psicolog_id", nullable = false)
+    private Psicologo psicologo;
 
-    @Column(name = "paciente_id", nullable = false)
-    private Integer pacienteId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "paciente_id", nullable = false)
+    private Paciente paciente;
 
-    @Column(name = "valor", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_pagamento_id", nullable = false)
+    private TipoPagamento tipoPagamento;
+
+    @Column(name = "valor", nullable = false, precision = 10, scale = 2)
     private BigDecimal valor;
 
     @Column(name = "data", nullable = false)
     private LocalDate data;
 
-    @Column(name = "tipo_pagamento_id")
-    private Integer tipoPagamentoId;
+    @Column(name = "observacoes", length = 500)
+    private String observacoes;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Integer getClinicaId() { return clinicaId; }
-    public void setClinicaId(Integer clinicaId) { this.clinicaId = clinicaId; }
-    public Integer getPsicologId() { return psicologId; }
-    public void setPsicologId(Integer psicologId) { this.psicologId = psicologId; }
-    public Integer getPacienteId() { return pacienteId; }
-    public void setPacienteId(Integer pacienteId) { this.pacienteId = pacienteId; }
-    public BigDecimal getValor() { return valor; }
-    public void setValor(BigDecimal valor) { this.valor = valor; }
-    public LocalDate getData() { return data; }
-    public void setData(LocalDate data) { this.data = data; }
-    public Integer getTipoPagamentoId() { return tipoPagamentoId; }
-    public void setTipoPagamentoId(Integer tipoPagamentoId) { this.tipoPagamentoId = tipoPagamentoId; }
+    // Compatibilidade com código existente
+    @Transient
+    public Integer getClinicaId() {
+        return clinica != null ? clinica.getId().intValue() : null;
+    }
+
+    @Transient
+    public Integer getPsicologId() {
+        return psicologo != null ? psicologo.getId().intValue() : null;
+    }
+
+    @Transient
+    public Integer getPacienteId() {
+        return paciente != null ? paciente.getId().intValue() : null;
+    }
+
+    @Transient
+    public Integer getTipoPagamentoId() {
+        return tipoPagamento != null ? tipoPagamento.getId().intValue() : null;
+    }
 }
-
-

@@ -5,11 +5,11 @@ import com.gestaopsi.prd.dto.LoginResponse;
 import com.gestaopsi.prd.entity.Usuario;
 import com.gestaopsi.prd.service.AuthService;
 import com.gestaopsi.prd.service.JwtService;
-import com.gestaopsi.prd.repository.ClinicaRepository;
-import com.gestaopsi.prd.repository.PsicologoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,27 +21,19 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Autenticação", description = "Endpoints para autenticação de usuários")
+@RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
-    private final ClinicaRepository clinicaRepository;
-    private final PsicologoRepository psicologoRepository;
-
-    public AuthController(AuthService authService, JwtService jwtService, ClinicaRepository clinicaRepository, PsicologoRepository psicologoRepository) {
-        this.authService = authService;
-        this.jwtService = jwtService;
-        this.clinicaRepository = clinicaRepository;
-        this.psicologoRepository = psicologoRepository;
-    }
 
     @PostMapping("/login")
     @Operation(summary = "Realizar login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             Optional<Usuario> usuarioOpt = authService.authenticate(
-                loginRequest.getClinicaLogin(),
-                loginRequest.getPsicologLogin(),
+                loginRequest.getUsername(),
                 loginRequest.getPassword()
             );
 
@@ -49,7 +41,7 @@ public class AuthController {
                 Usuario usuario = usuarioOpt.get();
 
                 UserDetails userDetails = User.builder()
-                        .username(usuario.getClinicaId() + ":" + usuario.getPsicologId())
+                        .username(usuario.getUsername())
                         .password(usuario.getSenha())
                         .authorities(new ArrayList<>())
                         .build();
@@ -59,20 +51,15 @@ public class AuthController {
                 LoginResponse response = new LoginResponse();
                 response.setToken(token);
                 response.setUserId(usuario.getId());
+                response.setUsername(usuario.getUsername());
                 response.setClinicaId(usuario.getClinicaId().longValue());
                 response.setPsicologId(usuario.getPsicologId().longValue());
-                response.setClinicaLogin(loginRequest.getClinicaLogin());
-                response.setPsicologLogin(loginRequest.getPsicologLogin());
                 response.setTipoUser(String.valueOf(usuario.getTipoId()));
                 response.setClinicaNome(
-                        clinicaRepository.findByClinicaLoginAndStatusTrue(loginRequest.getClinicaLogin())
-                                .map(c -> c.getNome())
-                                .orElse(null)
+                        usuario.getClinica() != null ? usuario.getClinica().getNome() : null
                 );
-                response.setPsicologNome(
-                        psicologoRepository.findByPsicologLogin(loginRequest.getPsicologLogin())
-                                .map(p -> p.getNome())
-                                .orElse(null)
+                response.setPsicologoNome(
+                        usuario.getPsicologo() != null ? usuario.getPsicologo().getNome() : null
                 );
                 response.setTituloSite(usuario.getTitulo());
 

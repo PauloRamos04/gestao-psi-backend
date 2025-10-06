@@ -1,27 +1,33 @@
 package com.gestaopsi.prd.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "salas")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Sala {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "clinica_id", nullable = false)
-    private Integer clinicaId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "clinica_id", nullable = false)
+    private Clinica clinica;
 
-    @Column(name = "nome", nullable = false)
+    @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Integer getClinicaId() { return clinicaId; }
-    public void setClinicaId(Integer clinicaId) { this.clinicaId = clinicaId; }
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    // Compatibilidade com código existente
+    @Transient
+    public Integer getClinicaId() {
+        return clinica != null ? clinica.getId().intValue() : null;
+    }
 }
-
-

@@ -1,38 +1,41 @@
 package com.gestaopsi.prd.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "psicologos")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Psicologo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "psicolog_login", nullable = false, unique = true)
+    @Column(name = "psicolog_login", unique = true, nullable = false, length = 50)
     private String psicologLogin;
 
-    @Column(name = "nome", nullable = false)
+    @Column(name = "nome", nullable = false, length = 200)
     private String nome;
 
     @Column(name = "dt_ativacao")
     private LocalDate dtAtivacao;
 
-    @Column(name = "categoria_id")
-    private Integer categoriaId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getPsicologLogin() { return psicologLogin; }
-    public void setPsicologLogin(String psicologLogin) { this.psicologLogin = psicologLogin; }
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
-    public LocalDate getDtAtivacao() { return dtAtivacao; }
-    public void setDtAtivacao(LocalDate dtAtivacao) { this.dtAtivacao = dtAtivacao; }
-    public Integer getCategoriaId() { return categoriaId; }
-    public void setCategoriaId(Integer categoriaId) { this.categoriaId = categoriaId; }
+    // Compatibilidade
+    @Transient
+    public Integer getCategoriaId() {
+        return categoria != null ? categoria.getId().intValue() : null;
+    }
 }
-
-

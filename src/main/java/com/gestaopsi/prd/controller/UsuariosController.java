@@ -1,13 +1,18 @@
 package com.gestaopsi.prd.controller;
 
+import com.gestaopsi.prd.dto.UsuarioRequest;
+import com.gestaopsi.prd.dto.UsuarioResponse;
 import com.gestaopsi.prd.entity.Usuario;
 import com.gestaopsi.prd.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -22,14 +27,19 @@ public class UsuariosController {
 
     @GetMapping
     @Operation(summary = "Listar usuários")
-    public ResponseEntity<List<Usuario>> listAll() {
-        return ResponseEntity.ok(usuarioService.listAll());
+    public ResponseEntity<List<UsuarioResponse>> listAll() {
+        List<UsuarioResponse> usuarios = usuarioService.listAll()
+                .stream()
+                .map(UsuarioResponse::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(usuarios);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar usuário por id")
-    public ResponseEntity<Usuario> getById(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponse> getById(@PathVariable Long id) {
         return usuarioService.findById(id)
+                .map(UsuarioResponse::fromEntity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -44,6 +54,24 @@ public class UsuariosController {
     @Operation(summary = "Desativar usuário")
     public ResponseEntity<Void> desativar(@PathVariable Long id) {
         return usuarioService.desativar(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    @Operation(summary = "Criar novo usuário")
+    public ResponseEntity<UsuarioResponse> criar(@Valid @RequestBody UsuarioRequest request) {
+        Usuario usuario = usuarioService.criar(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioResponse.fromEntity(usuario));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Atualizar usuário")
+    public ResponseEntity<UsuarioResponse> atualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody UsuarioRequest request) {
+        return usuarioService.atualizar(id, request)
+                .map(UsuarioResponse::fromEntity)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
 

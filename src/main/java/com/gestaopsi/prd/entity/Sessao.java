@@ -1,28 +1,45 @@
 package com.gestaopsi.prd.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "sessoes")
+@Table(name = "sessoes", indexes = {
+    @Index(name = "idx_sessoes_data", columnList = "data"),
+    @Index(name = "idx_sessoes_psicologo", columnList = "psicolog_id"),
+    @Index(name = "idx_sessoes_paciente", columnList = "paciente_id")
+})
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Sessao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "clinica_id", nullable = false)
-    private Integer clinicaId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "clinica_id", nullable = false)
+    private Clinica clinica;
 
-    @Column(name = "psicolog_id", nullable = false)
-    private Integer psicologId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "psicolog_id", nullable = false)
+    private Psicologo psicologo;
 
-    @Column(name = "paciente_id", nullable = false)
-    private Integer pacienteId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "paciente_id", nullable = false)
+    private Paciente paciente;
 
-    @Column(name = "sala_id")
-    private Integer salaId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sala_id")
+    private Sala sala;
 
     @Column(name = "data", nullable = false)
     private LocalDate data;
@@ -33,22 +50,27 @@ public class Sessao {
     @Column(name = "status", nullable = false)
     private Boolean status = true;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Integer getClinicaId() { return clinicaId; }
-    public void setClinicaId(Integer clinicaId) { this.clinicaId = clinicaId; }
-    public Integer getPsicologId() { return psicologId; }
-    public void setPsicologId(Integer psicologId) { this.psicologId = psicologId; }
-    public Integer getPacienteId() { return pacienteId; }
-    public void setPacienteId(Integer pacienteId) { this.pacienteId = pacienteId; }
-    public Integer getSalaId() { return salaId; }
-    public void setSalaId(Integer salaId) { this.salaId = salaId; }
-    public LocalDate getData() { return data; }
-    public void setData(LocalDate data) { this.data = data; }
-    public LocalTime getHora() { return hora; }
-    public void setHora(LocalTime hora) { this.hora = hora; }
-    public Boolean getStatus() { return status; }
-    public void setStatus(Boolean status) { this.status = status; }
+    @Column(name = "observacoes", length = 500)
+    private String observacoes;
+
+    // Compatibilidade com código existente
+    @Transient
+    public Integer getClinicaId() {
+        return clinica != null ? clinica.getId().intValue() : null;
+    }
+
+    @Transient
+    public Integer getPsicologId() {
+        return psicologo != null ? psicologo.getId().intValue() : null;
+    }
+
+    @Transient
+    public Integer getPacienteId() {
+        return paciente != null ? paciente.getId().intValue() : null;
+    }
+
+    @Transient
+    public Integer getSalaId() {
+        return sala != null ? sala.getId().intValue() : null;
+    }
 }
-
-
