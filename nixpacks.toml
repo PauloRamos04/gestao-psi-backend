@@ -1,13 +1,16 @@
 [phases.setup]
-nixPkgs = ["...", "openjdk21"]
+nixPkgs = ["openjdk21"]
 
 [phases.build]
 cmds = [
   "chmod +x mvnw",
-  "./mvnw clean compile -DskipTests",
-  "./mvnw package -DskipTests"
+  "./mvnw --version",
+  "./mvnw clean install -DskipTests -B -U"
 ]
 
 [start]
-cmd = "java -Dserver.port=$PORT -jar target/gestao-psi-backend-1.0.0.jar"
+cmd = "java -Xmx512m -Dspring.profiles.active=prod -Dserver.port=$PORT -jar target/gestao-psi-backend-1.0.0.jar"
+
+[variables]
+MAVEN_OPTS = "-Xmx512m"
 
