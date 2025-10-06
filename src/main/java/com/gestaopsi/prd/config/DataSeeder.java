@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-//@Component // Desabilitado temporariamente para deploy
+@Component
 public class DataSeeder implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(DataSeeder.class);
