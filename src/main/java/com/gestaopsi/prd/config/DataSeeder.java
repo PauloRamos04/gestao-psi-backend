@@ -5,12 +5,14 @@ import com.gestaopsi.prd.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
 @Component
+@Profile({"dev", "default"})  // Só executa em desenvolvimento, não em produção
 public class DataSeeder implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(DataSeeder.class);
@@ -38,16 +40,25 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
-        logger.info("🌱 Iniciando seeder de dados...");
+    public void run(String... args) {
+        try {
+            logger.info("🌱 Iniciando seeder de dados...");
 
-        // Verificar se já existe dados
-        if (clinicaRepository.count() > 0) {
-            logger.info("✅ Dados já existem. Pulando seeder.");
-            return;
+            // Verificar se já existe dados
+            if (clinicaRepository.count() > 0) {
+                logger.info("✅ Dados já existem. Pulando seeder.");
+                return;
+            }
+
+            logger.info("📝 Criando dados iniciais...");
+            criarDadosIniciais();
+        } catch (Exception e) {
+            logger.error("❌ Erro ao executar seeder: {}", e.getMessage());
+            logger.warn("⚠️ Aplicação continuará sem dados iniciais");
         }
+    }
 
-        logger.info("📝 Criando dados iniciais...");
+    private void criarDadosIniciais() {
 
         // 1. Criar Tipos de Usuário
         TipoUser tipoAdmin = TipoUser.builder()
