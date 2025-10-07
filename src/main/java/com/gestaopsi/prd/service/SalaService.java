@@ -11,6 +11,9 @@ import com.gestaopsi.prd.repository.SalaRepository;
 import com.gestaopsi.prd.repository.SessaoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,24 +33,31 @@ public class SalaService {
     private final SessaoRepository sessaoRepository;
     private final PsicologoRepository psicologoRepository;
 
+    @Cacheable(value = "salas", key = "#clinicaId")
     public List<Sala> listarPorClinica(Long clinicaId) {
-        log.info("Listando salas - Clinica: {}", clinicaId);
+        log.info("Listando salas - Clinica: {} (sem cache)", clinicaId);
         return salaRepository.findByClinicaId(clinicaId.intValue());
     }
 
+    @Cacheable(value = "salas", key = "'ativas_' + #clinicaId")
     public List<Sala> listarSalasAtivas(Long clinicaId) {
-        log.info("Listando salas ativas - Clinica: {}", clinicaId);
+        log.info("Listando salas ativas - Clinica: {} (sem cache)", clinicaId);
         return salaRepository.findByClinicaId(clinicaId.intValue())
             .stream()
             .filter(Sala::getAtiva)
             .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "salas", key = "'sala_' + #id")
     public Optional<Sala> buscarPorId(Long id) {
         return salaRepository.findById(id);
     }
 
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(value = "salas", key = "#request.clinicaId"),
+        @CacheEvict(value = "salas", key = "'ativas_' + #request.clinicaId")
+    })
     public Sala criar(SalaRequest request) {
         log.info("Criando nova sala: {}", request.getNome());
         
@@ -81,6 +91,7 @@ public class SalaService {
     }
 
     @Transactional
+    @CacheEvict(value = "salas", allEntries = true)
     public Optional<Sala> atualizar(Long id, SalaRequest request) {
         log.info("Atualizando sala: {}", id);
         

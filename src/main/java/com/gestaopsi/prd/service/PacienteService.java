@@ -9,6 +9,8 @@ import com.gestaopsi.prd.repository.PacienteRepository;
 import com.gestaopsi.prd.repository.PsicologoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,28 +28,34 @@ public class PacienteService {
     private final ClinicaRepository clinicaRepository;
     private final PsicologoRepository psicologoRepository;
 
+    // Cache por 30 minutos
+    @Cacheable(value = "pacientes", key = "#clinicaId + '_' + #psicologId + '_' + #pageable.pageNumber")
     public Page<Paciente> listarPorClinicaEPsicologo(
             Long clinicaId, 
             Long psicologId, 
             Pageable pageable) {
         
-        log.info("Listando pacientes - Clinica: {}, Psicólogo: {}", clinicaId, psicologId);
+        log.info("Listando pacientes - Clinica: {}, Psicólogo: {} (sem cache)", clinicaId, psicologId);
         return pacienteRepository.findByClinicaIdAndPsicologIdAndStatusTrue(
             clinicaId.intValue(), psicologId.intValue(), pageable
         );
     }
 
+    @Cacheable(value = "pacientes", key = "'todos_' + #clinicaId + '_' + #psicologId")
     public List<Paciente> listarTodos(Long clinicaId, Long psicologId) {
+        log.info("Listando todos pacientes - Clinica: {}, Psicólogo: {} (sem cache)", clinicaId, psicologId);
         return pacienteRepository.findByClinicaIdAndPsicologIdAndStatusTrue(
             clinicaId.intValue(), psicologId.intValue()
         );
     }
 
+    @Cacheable(value = "pacientes", key = "'paciente_' + #id")
     public Optional<Paciente> buscarPorId(Long id) {
         return pacienteRepository.findById(id);
     }
 
     @Transactional
+    @CacheEvict(value = "pacientes", allEntries = true)
     public Paciente criar(PacienteRequest request) {
         log.info("Criando novo paciente: {}", request.getNome());
         
