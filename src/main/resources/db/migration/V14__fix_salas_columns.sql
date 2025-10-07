@@ -3,10 +3,10 @@
 -- Adicionar colunas apenas se não existirem
 DO $$
 BEGIN
-    -- ativo
+    -- ativa (não ativo)
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
-                   WHERE table_name='salas' AND column_name='ativo') THEN
-        ALTER TABLE salas ADD COLUMN ativo BOOLEAN DEFAULT TRUE;
+                   WHERE table_name='salas' AND column_name='ativa') THEN
+        ALTER TABLE salas ADD COLUMN ativa BOOLEAN DEFAULT TRUE NOT NULL;
     END IF;
 
     -- capacidade
@@ -21,10 +21,10 @@ BEGIN
         ALTER TABLE salas ADD COLUMN descricao VARCHAR(500);
     END IF;
 
-    -- exclusive
+    -- exclusiva (não exclusive)
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
-                   WHERE table_name='salas' AND column_name='exclusive') THEN
-        ALTER TABLE salas ADD COLUMN exclusive BOOLEAN DEFAULT FALSE;
+                   WHERE table_name='salas' AND column_name='exclusiva') THEN
+        ALTER TABLE salas ADD COLUMN exclusiva BOOLEAN DEFAULT FALSE;
     END IF;
 
     -- nome_responsavel
@@ -57,10 +57,22 @@ BEGIN
         ALTER TABLE salas ADD COLUMN cor VARCHAR(7);
     END IF;
 
-    -- psicolog_responsavel_id
+    -- psicologo_responsavel_id
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
-                   WHERE table_name='salas' AND column_name='psicolog_responsavel_id') THEN
-        ALTER TABLE salas ADD COLUMN psicolog_responsavel_id INTEGER REFERENCES psicologos(id);
+                   WHERE table_name='salas' AND column_name='psicologo_responsavel_id') THEN
+        ALTER TABLE salas ADD COLUMN psicologo_responsavel_id INTEGER REFERENCES psicologos(id);
+    END IF;
+
+    -- andar
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                   WHERE table_name='salas' AND column_name='andar') THEN
+        ALTER TABLE salas ADD COLUMN andar INTEGER;
+    END IF;
+
+    -- bloco
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                   WHERE table_name='salas' AND column_name='bloco') THEN
+        ALTER TABLE salas ADD COLUMN bloco VARCHAR(50);
     END IF;
 END $$;
 
