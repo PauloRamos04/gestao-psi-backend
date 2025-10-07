@@ -19,7 +19,7 @@ ON sessoes(data, sala_id);
 
 -- Sessões: busca por psicólogo + data (agenda do profissional)
 CREATE INDEX IF NOT EXISTS idx_sessoes_psicologo_data 
-ON sessoes(psicologo_id, data);
+ON sessoes(psicolog_id, data);
 
 -- Sessões: busca por paciente (histórico do paciente)
 CREATE INDEX IF NOT EXISTS idx_sessoes_paciente 
