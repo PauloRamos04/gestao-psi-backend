@@ -33,12 +33,14 @@ public class SalaService {
     private final SessaoRepository sessaoRepository;
     private final PsicologoRepository psicologoRepository;
 
+    @Transactional(readOnly = true)
     @Cacheable(value = "salas", key = "#clinicaId")
     public List<Sala> listarPorClinica(Long clinicaId) {
         log.info("Listando salas - Clinica: {} (sem cache)", clinicaId);
         return salaRepository.findByClinicaId(clinicaId.intValue());
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value = "salas", key = "'ativas_' + #clinicaId")
     public List<Sala> listarSalasAtivas(Long clinicaId) {
         log.info("Listando salas ativas - Clinica: {} (sem cache)", clinicaId);
@@ -48,6 +50,7 @@ public class SalaService {
             .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value = "salas", key = "'sala_' + #id")
     public Optional<Sala> buscarPorId(Long id) {
         return salaRepository.findById(id);

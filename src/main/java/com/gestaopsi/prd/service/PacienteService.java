@@ -29,6 +29,7 @@ public class PacienteService {
     private final PsicologoRepository psicologoRepository;
 
     // Cache por 30 minutos
+    @Transactional(readOnly = true)
     @Cacheable(value = "pacientes", key = "#clinicaId + '_' + #psicologId + '_' + #pageable.pageNumber")
     public Page<Paciente> listarPorClinicaEPsicologo(
             Long clinicaId, 
@@ -41,6 +42,7 @@ public class PacienteService {
         );
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value = "pacientes", key = "'todos_' + #clinicaId + '_' + #psicologId")
     public List<Paciente> listarTodos(Long clinicaId, Long psicologId) {
         log.info("Listando todos pacientes - Clinica: {}, Psicólogo: {} (sem cache)", clinicaId, psicologId);
@@ -49,6 +51,7 @@ public class PacienteService {
         );
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value = "pacientes", key = "'paciente_' + #id")
     public Optional<Paciente> buscarPorId(Long id) {
         return pacienteRepository.findById(id);

@@ -13,13 +13,14 @@ import java.util.List;
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
     
-    @Query("SELECT p FROM Paciente p WHERE p.clinica.id = :clinicaId AND p.psicologo.id = :psicologId AND p.status = true")
+    @Query("SELECT DISTINCT p FROM Paciente p LEFT JOIN FETCH p.clinica LEFT JOIN FETCH p.psicologo WHERE p.clinica.id = :clinicaId AND p.psicologo.id = :psicologId AND p.status = true")
     List<Paciente> findByClinicaIdAndPsicologIdAndStatusTrue(
         @Param("clinicaId") Integer clinicaId, 
         @Param("psicologId") Integer psicologId
     );
     
-    @Query("SELECT p FROM Paciente p WHERE p.clinica.id = :clinicaId AND p.psicologo.id = :psicologId AND p.status = true")
+    @Query(value = "SELECT DISTINCT p FROM Paciente p LEFT JOIN FETCH p.clinica LEFT JOIN FETCH p.psicologo WHERE p.clinica.id = :clinicaId AND p.psicologo.id = :psicologId AND p.status = true",
+           countQuery = "SELECT COUNT(DISTINCT p) FROM Paciente p WHERE p.clinica.id = :clinicaId AND p.psicologo.id = :psicologId AND p.status = true")
     Page<Paciente> findByClinicaIdAndPsicologIdAndStatusTrue(
         @Param("clinicaId") Integer clinicaId, 
         @Param("psicologId") Integer psicologId, 
