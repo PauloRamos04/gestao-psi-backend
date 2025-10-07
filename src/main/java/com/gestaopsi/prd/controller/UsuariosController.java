@@ -1,6 +1,7 @@
 package com.gestaopsi.prd.controller;
 
 import com.gestaopsi.prd.dto.UsuarioRequest;
+import com.gestaopsi.prd.dto.UsuarioUpdateRequest;
 import com.gestaopsi.prd.dto.UsuarioResponse;
 import com.gestaopsi.prd.entity.Usuario;
 import com.gestaopsi.prd.service.UsuarioService;
@@ -67,7 +68,7 @@ public class UsuariosController {
     @Operation(summary = "Atualizar usuário")
     public ResponseEntity<UsuarioResponse> atualizar(
             @PathVariable Long id,
-            @Valid @RequestBody UsuarioRequest request) {
+            @Valid @RequestBody UsuarioUpdateRequest request) {
         return usuarioService.atualizar(id, request)
                 .map(UsuarioResponse::fromEntity)
                 .map(ResponseEntity::ok)
