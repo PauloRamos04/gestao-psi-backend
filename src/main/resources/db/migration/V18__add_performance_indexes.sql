@@ -38,8 +38,8 @@ CREATE INDEX IF NOT EXISTS idx_pagamentos_paciente
 ON pagamentos(paciente_id);
 
 -- Usuários: busca por username (login)
-CREATE INDEX IF NOT EXISTS idx_usuarios_username 
-ON usuarios(username);
+CREATE INDEX IF NOT EXISTS idx_users_username 
+ON users(username);
 
 -- Notificações: busca por usuário + lida (notificações não lidas)
 CREATE INDEX IF NOT EXISTS idx_notificacoes_usuario_lida 
