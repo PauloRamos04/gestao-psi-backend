@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/backups")
 @Tag(name = "Backups", description = "Gerenciamento de backups do banco de dados")
 @RequiredArgsConstructor
+// @PreAuthorize("hasRole('ADMIN')") // Descomente quando tiver security completo
 public class BackupController {
 
     private final BackupService backupService;

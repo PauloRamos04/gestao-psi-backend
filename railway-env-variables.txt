@@ -1,0 +1,27 @@
+# ========================================
+# VARIÁVEIS DE AMBIENTE RAILWAY - BACKUP
+# ========================================
+
+# Backup Automático
+BACKUP_ENABLED=true
+BACKUP_DIRECTORY=/app/backups
+BACKUP_CRON=0 0 3 * * ?
+BACKUP_RETENTION_DAYS=7
+
+# Banco de Dados (já deve existir)
+DB_URL=<railway-postgres-url>
+DB_USER=<railway-postgres-user>
+DB_PASSWORD=<railway-postgres-password>
+
+# JWT (já deve existir)
+JWT_SECRET=<seu-jwt-secret>
+
+# CORS (já deve existir)
+CORS_ALLOWED_ORIGINS=https://gestao-psi-blush.vercel.app
+
+# Profile Spring
+SPRING_PROFILES_ACTIVE=prod
+
+# Porta (Railway fornece automaticamente)
+PORT=8081
+
