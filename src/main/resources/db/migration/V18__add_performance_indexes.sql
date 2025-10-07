@@ -27,11 +27,11 @@ ON sessoes(paciente_id);
 
 -- Pagamentos: busca por data (relatórios financeiros)
 CREATE INDEX IF NOT EXISTS idx_pagamentos_data 
-ON pagamentos(data_pagamento);
+ON pagamentos(data);
 
--- Pagamentos: busca por data + método (análise por forma de pagamento)
-CREATE INDEX IF NOT EXISTS idx_pagamentos_data_metodo 
-ON pagamentos(data_pagamento, metodo_pagamento);
+-- Pagamentos: busca por data + tipo (análise por forma de pagamento)
+CREATE INDEX IF NOT EXISTS idx_pagamentos_data_tipo 
+ON pagamentos(data, tipo_pagamento_id);
 
 -- Pagamentos: busca por sessão (verificar se sessão foi paga)
 CREATE INDEX IF NOT EXISTS idx_pagamentos_sessao 
@@ -65,10 +65,11 @@ ON download_requests(status);
 CREATE INDEX IF NOT EXISTS idx_download_requests_usuario_data 
 ON download_requests(user_id, created_at DESC);
 
-COMMENT ON INDEX idx_pacientes_clinica_psic_status IS 'Otimiza listagem de pacientes por clínica/psicólogo';
-COMMENT ON INDEX idx_sessoes_data IS 'Otimiza busca de sessões por data (calendário)';
-COMMENT ON INDEX idx_sessoes_data_sala IS 'Otimiza verificação de disponibilidade de sala';
-COMMENT ON INDEX idx_pagamentos_data IS 'Otimiza relatórios financeiros por período';
-COMMENT ON INDEX idx_notificacoes_usuario_lida IS 'Otimiza listagem de notificações não lidas';
-COMMENT ON INDEX idx_logs_data_acao IS 'Otimiza consultas de auditoria';
+-- Comentários dos índices
+-- idx_pacientes_clinica_psic_status: Otimiza listagem de pacientes por clínica/psicólogo
+-- idx_sessoes_data: Otimiza busca de sessões por data (calendário)
+-- idx_sessoes_data_sala: Otimiza verificação de disponibilidade de sala
+-- idx_pagamentos_data: Otimiza relatórios financeiros por período
+-- idx_notificacoes_usuario_lida: Otimiza listagem de notificações não lidas
+-- idx_logs_data_acao: Otimiza consultas de auditoria
 
