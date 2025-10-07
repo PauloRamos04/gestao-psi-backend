@@ -33,9 +33,9 @@ ON pagamentos(data);
 CREATE INDEX IF NOT EXISTS idx_pagamentos_data_tipo 
 ON pagamentos(data, tipo_pagamento_id);
 
--- Pagamentos: busca por sessão (verificar se sessão foi paga)
-CREATE INDEX IF NOT EXISTS idx_pagamentos_sessao 
-ON pagamentos(sessao_id);
+-- Pagamentos: busca por paciente (histórico financeiro do paciente)
+CREATE INDEX IF NOT EXISTS idx_pagamentos_paciente 
+ON pagamentos(paciente_id);
 
 -- Usuários: busca por username (login)
 CREATE INDEX IF NOT EXISTS idx_usuarios_username 
