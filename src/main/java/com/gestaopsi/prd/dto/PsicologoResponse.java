@@ -14,10 +14,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PsicologoResponse {
     private Long id;
-    private String psicologLogin;
+    private String psicologLogin; // Identificador interno (opcional)
     private String nome;
+    private String crp; // Número do CRP
+    private String email;
+    private String telefone;
     private LocalDate dtAtivacao;
-    private Integer categoriaId;
+    private Long categoriaId;
     private String categoriaNome;
 
     public static PsicologoResponse fromEntity(Psicologo psicologo) {
@@ -25,8 +28,11 @@ public class PsicologoResponse {
                 .id(psicologo.getId())
                 .psicologLogin(psicologo.getPsicologLogin())
                 .nome(psicologo.getNome())
+                .crp(psicologo.getCrp())
+                .email(psicologo.getEmail())
+                .telefone(psicologo.getTelefone())
                 .dtAtivacao(psicologo.getDtAtivacao())
-                .categoriaId(psicologo.getCategoria() != null ? psicologo.getCategoria().getId().intValue() : null)
+                .categoriaId(psicologo.getCategoria() != null ? psicologo.getCategoria().getId() : null)
                 .categoriaNome(psicologo.getCategoria() != null ? psicologo.getCategoria().getNome() : null)
                 .build();
     }

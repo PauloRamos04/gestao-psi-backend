@@ -23,6 +23,13 @@ public class PagamentoResponse {
     private Integer tipoPagamentoId;
     private String observacoes;
     
+    // Campos de Convênio
+    private Boolean ehConvenio;
+    private String convenio;
+    private String numeroGuia;
+    private Double valorConvenio;
+    private Double valorCoparticipacao;
+    
     // Dados relacionados
     private String clinicaNome;
     private String psicologoNome;
@@ -40,6 +47,13 @@ public class PagamentoResponse {
                 .data(pagamento.getData())
                 .tipoPagamentoId(pagamento.getTipoPagamento() != null ? pagamento.getTipoPagamento().getId().intValue() : null)
                 .observacoes(pagamento.getObservacoes())
+                // Campos de Convênio
+                .ehConvenio(pagamento.getEhConvenio())
+                .convenio(pagamento.getConvenio())
+                .numeroGuia(pagamento.getNumeroGuia())
+                .valorConvenio(pagamento.getValorConvenio() != null ? pagamento.getValorConvenio().doubleValue() : null)
+                .valorCoparticipacao(pagamento.getValorCoparticipacao() != null ? pagamento.getValorCoparticipacao().doubleValue() : null)
+                // Dados relacionados
                 .clinicaNome(pagamento.getClinica() != null ? pagamento.getClinica().getNome() : null)
                 .psicologoNome(pagamento.getPsicologo() != null ? pagamento.getPsicologo().getNome() : null)
                 .pacienteNome(pagamento.getPaciente() != null ? pagamento.getPaciente().getNome() : null)

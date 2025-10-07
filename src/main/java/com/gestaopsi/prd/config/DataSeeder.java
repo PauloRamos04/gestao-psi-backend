@@ -22,6 +22,7 @@ public class DataSeeder implements CommandLineRunner {
     private final UsuarioRepository usuarioRepository;
     private final TipoUserRepository tipoUserRepository;
     private final CategoriaRepository categoriaRepository;
+    private final TipoPagamentoRepository tipoPagamentoRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DataSeeder(
@@ -30,12 +31,14 @@ public class DataSeeder implements CommandLineRunner {
             UsuarioRepository usuarioRepository,
             TipoUserRepository tipoUserRepository,
             CategoriaRepository categoriaRepository,
+            TipoPagamentoRepository tipoPagamentoRepository,
             PasswordEncoder passwordEncoder) {
         this.clinicaRepository = clinicaRepository;
         this.psicologoRepository = psicologoRepository;
         this.usuarioRepository = usuarioRepository;
         this.tipoUserRepository = tipoUserRepository;
         this.categoriaRepository = categoriaRepository;
+        this.tipoPagamentoRepository = tipoPagamentoRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -79,7 +82,38 @@ public class DataSeeder implements CommandLineRunner {
         tipoFuncionario = tipoUserRepository.save(tipoFuncionario);
         logger.info("✅ Tipo criado: FUNCIONARIO (ID: {})", tipoFuncionario.getId());
 
-        // 2. Criar Categorias
+        // 2. Criar Tipos de Pagamento
+        TipoPagamento tipoPix = TipoPagamento.builder()
+            .nome("PIX")
+            .build();
+        tipoPix = tipoPagamentoRepository.save(tipoPix);
+        logger.info("✅ Tipo de pagamento criado: PIX (ID: {})", tipoPix.getId());
+
+        TipoPagamento tipoDinheiro = TipoPagamento.builder()
+            .nome("DINHEIRO")
+            .build();
+        tipoDinheiro = tipoPagamentoRepository.save(tipoDinheiro);
+        logger.info("✅ Tipo de pagamento criado: DINHEIRO (ID: {})", tipoDinheiro.getId());
+
+        TipoPagamento tipoCartao = TipoPagamento.builder()
+            .nome("CARTAO_CREDITO")
+            .build();
+        tipoCartao = tipoPagamentoRepository.save(tipoCartao);
+        logger.info("✅ Tipo de pagamento criado: CARTAO_CREDITO (ID: {})", tipoCartao.getId());
+
+        TipoPagamento tipoDebito = TipoPagamento.builder()
+            .nome("CARTAO_DEBITO")
+            .build();
+        tipoDebito = tipoPagamentoRepository.save(tipoDebito);
+        logger.info("✅ Tipo de pagamento criado: CARTAO_DEBITO (ID: {})", tipoDebito.getId());
+
+        TipoPagamento tipoTransferencia = TipoPagamento.builder()
+            .nome("TRANSFERENCIA")
+            .build();
+        tipoTransferencia = tipoPagamentoRepository.save(tipoTransferencia);
+        logger.info("✅ Tipo de pagamento criado: TRANSFERENCIA (ID: {})", tipoTransferencia.getId());
+
+        // 3. Criar Categorias
         Categoria categoria = Categoria.builder()
             .nome("PSICOLOGO_CLINICO")
             .build();
@@ -101,7 +135,7 @@ public class DataSeeder implements CommandLineRunner {
             .build();
         categoriaNeuropsic = categoriaRepository.save(categoriaNeuropsic);
 
-        // 3. Criar Clínica
+        // 4. Criar Clínica
         Clinica clinica = Clinica.builder()
             .clinicaLogin("clinica1")
             .nome("Clínica Gestão PSI")
@@ -111,7 +145,7 @@ public class DataSeeder implements CommandLineRunner {
         clinica = clinicaRepository.save(clinica);
         logger.info("✅ Clínica criada: {} (ID: {})", clinica.getNome(), clinica.getId());
 
-        // 4. Criar Psicólogo
+        // 5. Criar Psicólogo
         Psicologo psicologo = Psicologo.builder()
             .psicologLogin("psicologo1")
             .nome("Dr. Psicólogo Teste")
@@ -121,7 +155,7 @@ public class DataSeeder implements CommandLineRunner {
         psicologo = psicologoRepository.save(psicologo);
         logger.info("✅ Psicólogo criado: {} (ID: {})", psicologo.getNome(), psicologo.getId());
 
-        // 5. Criar Usuário Administrador
+        // 6. Criar Usuário Administrador
         Usuario usuario = Usuario.builder()
             .username("admin")
             .clinica(clinica)

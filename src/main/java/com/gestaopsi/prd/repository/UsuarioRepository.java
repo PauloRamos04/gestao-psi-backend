@@ -14,6 +14,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Novo método de autenticação por username
     Optional<Usuario> findByUsernameAndStatusTrue(String username);
 
+    // Buscar usuário por psicólogo ID
+    Optional<Usuario> findByPsicologoId(Long psicologoId);
+
     // Método antigo mantido para compatibilidade (será removido)
     @Query(value = "select u.* from users u\n" +
             "join clinicas c on c.id = u.clinica_id and c.status = true\n" +

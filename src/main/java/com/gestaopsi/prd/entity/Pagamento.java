@@ -49,6 +49,23 @@ public class Pagamento {
     @Column(name = "observacoes", length = 500)
     private String observacoes;
 
+    // Campos de Convênio
+    @Column(name = "eh_convenio")
+    @Builder.Default
+    private Boolean ehConvenio = false;
+
+    @Column(name = "convenio", length = 100)
+    private String convenio;
+
+    @Column(name = "numero_guia", length = 50)
+    private String numeroGuia;
+
+    @Column(name = "valor_convenio", precision = 10, scale = 2)
+    private BigDecimal valorConvenio;
+
+    @Column(name = "valor_coparticipacao", precision = 10, scale = 2)
+    private BigDecimal valorCoparticipacao;
+
     // Compatibilidade com código existente
     @Transient
     public Integer getClinicaId() {

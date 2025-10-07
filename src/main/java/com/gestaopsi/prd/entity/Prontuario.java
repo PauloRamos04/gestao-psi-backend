@@ -1,5 +1,6 @@
 package com.gestaopsi.prd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,22 +15,26 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Prontuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paciente_id", nullable = false)
+    @JsonIgnoreProperties({"prontuarios", "hibernateLazyInitializer", "handler"})
     private Paciente paciente;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sessao_id")
+    @JsonIgnoreProperties({"prontuarios", "hibernateLazyInitializer", "handler"})
     private Sessao sessao;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "psicologo_id", nullable = false)
+    @JsonIgnoreProperties({"prontuarios", "hibernateLazyInitializer", "handler"})
     private Psicologo psicologo;
 
     @Column(nullable = false)

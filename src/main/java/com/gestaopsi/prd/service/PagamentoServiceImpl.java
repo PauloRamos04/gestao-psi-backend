@@ -68,6 +68,13 @@ public class PagamentoServiceImpl {
             .tipoPagamento(tipoPagamento)
             .valor(request.getValor())
             .data(request.getData())
+            .observacoes(request.getObservacoes())
+            // Campos de Convênio
+            .ehConvenio(request.getEhConvenio() != null ? request.getEhConvenio() : false)
+            .convenio(request.getConvenio())
+            .numeroGuia(request.getNumeroGuia())
+            .valorConvenio(request.getValorConvenio())
+            .valorCoparticipacao(request.getValorCoparticipacao())
             .build();
         
         return pagamentoRepository.save(pagamento);
@@ -81,6 +88,14 @@ public class PagamentoServiceImpl {
             .map(pagamento -> {
                 pagamento.setValor(request.getValor());
                 pagamento.setData(request.getData());
+                pagamento.setObservacoes(request.getObservacoes());
+                
+                // Atualizar campos de convênio
+                pagamento.setEhConvenio(request.getEhConvenio() != null ? request.getEhConvenio() : false);
+                pagamento.setConvenio(request.getConvenio());
+                pagamento.setNumeroGuia(request.getNumeroGuia());
+                pagamento.setValorConvenio(request.getValorConvenio());
+                pagamento.setValorCoparticipacao(request.getValorCoparticipacao());
                 
                 if (request.getTipoPagamentoId() != null) {
                     TipoPagamento tipoPagamento = tipoPagamentoRepository

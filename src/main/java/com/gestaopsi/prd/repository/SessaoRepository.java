@@ -37,7 +37,7 @@ public interface SessaoRepository extends JpaRepository<Sessao, Long> {
     
     @Query("SELECT s FROM Sessao s WHERE s.sala.id = :salaId AND s.data = :data AND s.hora = :hora")
     List<Sessao> findBySalaIdAndDataAndHora(
-        @Param("salaId") Long salaId,
+        @Param("salaId") Integer salaId,
         @Param("data") LocalDate data,
         @Param("hora") LocalTime hora
     );
@@ -47,5 +47,15 @@ public interface SessaoRepository extends JpaRepository<Sessao, Long> {
         @Param("pacienteId") Long pacienteId,
         @Param("data") LocalDate data,
         @Param("hora") LocalTime hora
+    );
+    
+    @Query("SELECT s FROM Sessao s WHERE s.sala.id = :salaId AND s.status = true")
+    List<Sessao> findBySalaIdAndStatusTrue(@Param("salaId") Integer salaId);
+    
+    @Query("SELECT s FROM Sessao s WHERE s.sala.id = :salaId AND s.data BETWEEN :inicio AND :fim")
+    List<Sessao> findBySalaIdAndDataBetween(
+        @Param("salaId") Integer salaId,
+        @Param("inicio") LocalDate inicio,
+        @Param("fim") LocalDate fim
     );
 }

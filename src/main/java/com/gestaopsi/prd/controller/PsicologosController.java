@@ -66,6 +66,43 @@ public class PsicologosController {
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return psicologoService.deletar(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/{id}/criar-usuario")
+    @Operation(summary = "Criar usuário para psicólogo existente")
+    public ResponseEntity<?> criarUsuarioParaPsicologo(
+            @PathVariable Long id,
+            @Valid @RequestBody PsicologoRequest request) {
+        try {
+            psicologoService.criarUsuarioParaPsicologoExistente(id, request);
+            return ResponseEntity.ok().body(new ResponseMessage("Usuário criado com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ResponseMessage(e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{id}/tem-usuario")
+    @Operation(summary = "Verificar se psicólogo tem usuário")
+    public ResponseEntity<Boolean> temUsuario(@PathVariable Long id) {
+        boolean temUsuario = psicologoService.temUsuario(id);
+        return ResponseEntity.ok(temUsuario);
+    }
+
+    // Classe helper para mensagens de resposta
+    static class ResponseMessage {
+        private String message;
+
+        public ResponseMessage(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
 }
 
 

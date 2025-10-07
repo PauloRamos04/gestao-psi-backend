@@ -37,5 +37,16 @@ public class PagamentoRequest {
     private Long tipoPagamentoId;
     
     private String observacoes;
+
+    // Campos de Convênio
+    private Boolean ehConvenio;
+    
+    private String convenio;
+    
+    private String numeroGuia;
+    
+    private BigDecimal valorConvenio;
+    
+    private BigDecimal valorCoparticipacao;
 }
 

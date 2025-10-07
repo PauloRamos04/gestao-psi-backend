@@ -5,14 +5,17 @@ import com.gestaopsi.prd.dto.LoginResponse;
 import com.gestaopsi.prd.entity.Usuario;
 import com.gestaopsi.prd.service.AuthService;
 import com.gestaopsi.prd.service.JwtService;
+import com.gestaopsi.prd.service.LogAuditoriaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,6 +30,9 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
+    private final LogAuditoriaService logAuditoriaService;
+    private final com.gestaopsi.prd.repository.UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/health")
     @Operation(summary = "Health check")
@@ -76,14 +82,59 @@ public class AuthController {
                 );
                 response.setTituloSite(usuario.getTitulo());
 
+                // Registrar log de login bem-sucedido
+                logAuditoriaService.registrarLog(
+                    "LOGIN",
+                    "Usuario",
+                    usuario.getId(),
+                    "Login realizado com sucesso: " + usuario.getUsername()
+                );
+
                 return ResponseEntity.ok(response);
             } else {
+                // Registrar tentativa de login falhada
+                logAuditoriaService.registrarLog(
+                    "LOGIN_FAILED",
+                    "Usuario",
+                    null,
+                    "Tentativa de login falhada para: " + loginRequest.getUsername()
+                );
+                
                 return ResponseEntity.status(401).build();
             }
         } catch (Exception e) {
             log.error("Erro ao realizar login", e);
+            
+            // Registrar erro no log
+            logAuditoriaService.registrarErro(
+                "Erro ao processar login: " + loginRequest.getUsername(),
+                e
+            );
+            
             return ResponseEntity.status(500).build();
         }
+    }
+
+    @PostMapping("/change-password")
+    @Operation(summary = "Alterar senha do usuário autenticado")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest req) {
+        Usuario usuario = usuarioRepository.findByUsernameAndStatusTrue(req.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+
+        if (!passwordEncoder.matches(req.getCurrentPassword(), usuario.getSenha())) {
+            return ResponseEntity.badRequest().body("Senha atual incorreta");
+        }
+
+        usuario.setSenha(passwordEncoder.encode(req.getNewPassword()));
+        usuarioRepository.save(usuario);
+        return ResponseEntity.ok().build();
+    }
+
+    @Data
+    public static class ChangePasswordRequest {
+        private String username; // opcional: se tiver SecurityContext, pode ser omitido
+        private String currentPassword;
+        private String newPassword;
     }
 }
 

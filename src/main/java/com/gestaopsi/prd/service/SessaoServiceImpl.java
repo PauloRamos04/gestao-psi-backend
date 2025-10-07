@@ -168,7 +168,7 @@ public class SessaoServiceImpl {
         // Validar conflito de sala
         if (salaId != null) {
             List<Sessao> conflitosSala = sessaoRepository
-                .findBySalaIdAndDataAndHora(salaId, data, hora);
+                .findBySalaIdAndDataAndHora(salaId.intValue(), data, hora);
             
             if (sessaoIdExcluir != null) {
                 conflitosSala.removeIf(s -> s.getId().equals(sessaoIdExcluir));
