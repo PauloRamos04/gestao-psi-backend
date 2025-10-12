@@ -12,3 +12,5 @@ public interface SublocacaoRepository extends JpaRepository<Sublocacao, Long> {
 }
 
 
+
+

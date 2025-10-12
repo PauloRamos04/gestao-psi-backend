@@ -26,3 +26,5 @@ COMMENT ON COLUMN pagamentos.numero_guia IS 'Número da guia/autorização do co
 COMMENT ON COLUMN pagamentos.valor_convenio IS 'Valor que será pago pelo convênio';
 COMMENT ON COLUMN pagamentos.valor_coparticipacao IS 'Valor de coparticipação pago pelo paciente';
 
+
+

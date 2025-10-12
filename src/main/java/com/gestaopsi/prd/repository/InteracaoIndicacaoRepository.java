@@ -8,3 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface InteracaoIndicacaoRepository extends JpaRepository<InteracaoIndicacao, Long> {}
 
 
+
+

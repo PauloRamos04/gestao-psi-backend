@@ -52,3 +52,5 @@ public class UsuarioUpdateRequest {
     private Boolean receberNotificacoesEmail;
     private Boolean receberNotificacoesSistema;
 }
+
+
