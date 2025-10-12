@@ -2,6 +2,7 @@ package com.gestaopsi.prd.config;
 
 import com.gestaopsi.prd.entity.*;
 import com.gestaopsi.prd.repository.*;
+import com.gestaopsi.prd.service.SystemConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -24,6 +25,7 @@ public class DataSeeder implements CommandLineRunner {
     private final CategoriaRepository categoriaRepository;
     private final TipoPagamentoRepository tipoPagamentoRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SystemConfigService systemConfigService;
 
     public DataSeeder(
             ClinicaRepository clinicaRepository,
@@ -32,7 +34,8 @@ public class DataSeeder implements CommandLineRunner {
             TipoUserRepository tipoUserRepository,
             CategoriaRepository categoriaRepository,
             TipoPagamentoRepository tipoPagamentoRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            SystemConfigService systemConfigService) {
         this.clinicaRepository = clinicaRepository;
         this.psicologoRepository = psicologoRepository;
         this.usuarioRepository = usuarioRepository;
@@ -40,12 +43,17 @@ public class DataSeeder implements CommandLineRunner {
         this.categoriaRepository = categoriaRepository;
         this.tipoPagamentoRepository = tipoPagamentoRepository;
         this.passwordEncoder = passwordEncoder;
+        this.systemConfigService = systemConfigService;
     }
 
     @Override
     public void run(String... args) {
         try {
             logger.info("🌱 Iniciando seeder de dados...");
+
+            // Inicializar configurações do sistema (sempre executa)
+            logger.info("⚙️ Inicializando configurações do sistema...");
+            systemConfigService.initializeDefaultConfigs();
 
             // Verificar se já existe dados
             if (clinicaRepository.count() > 0) {

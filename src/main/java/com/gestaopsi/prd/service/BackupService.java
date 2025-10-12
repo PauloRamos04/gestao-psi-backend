@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class BackupService {
 
+    private final SystemConfigService systemConfigService;
+
     @Value("${spring.datasource.url}")
     private String dbUrl;
 
@@ -32,19 +34,17 @@ public class BackupService {
     @Value("${backup.directory:./backups}")
     private String backupDirectory;
 
-    @Value("${backup.enabled:true}")
-    private boolean backupEnabled;
-
-    @Value("${backup.retention.days:30}")
-    private int retentionDays;
-
     /**
      * Executa backup diário às 3h da manhã
+     * Verifica se está habilitado no SystemConfig
      */
     @Scheduled(cron = "${backup.cron:0 0 3 * * ?}")
     public void executarBackupDiario() {
-        if (!backupEnabled) {
-            log.info("Backup automático desabilitado");
+        // Verificar se backup automático está habilitado no SystemConfig
+        Boolean backupEnabled = systemConfigService.isAutoBackupEnabled();
+        
+        if (backupEnabled == null || !backupEnabled) {
+            log.info("Backup automático desabilitado no SystemConfig");
             return;
         }
 
@@ -53,7 +53,7 @@ public class BackupService {
             String backupFile = criarBackup();
             log.info("Backup concluído com sucesso: {}", backupFile);
             
-            // Limpar backups antigos
+            // Limpar backups antigos usando retenção do SystemConfig
             limparBackupsAntigos();
         } catch (Exception e) {
             log.error("Erro ao executar backup automático: {}", e.getMessage(), e);
@@ -115,11 +115,18 @@ public class BackupService {
 
     /**
      * Remove backups mais antigos que o período de retenção
+     * Usa a configuração de retenção do SystemConfig
      */
     private void limparBackupsAntigos() {
         try {
             Path backupPath = Paths.get(backupDirectory);
             if (!Files.exists(backupPath)) return;
+
+            // Obter dias de retenção do SystemConfig
+            Integer retentionDays = systemConfigService.getBackupRetentionDays();
+            if (retentionDays == null) {
+                retentionDays = 30; // Padrão
+            }
 
             long cutoffTime = System.currentTimeMillis() - 
                 TimeUnit.DAYS.toMillis(retentionDays);
@@ -141,6 +148,8 @@ public class BackupService {
                         log.error("Erro ao remover backup: {}", path, e);
                     }
                 });
+                
+            log.info("Limpeza de backups concluída. Retenção: {} dias", retentionDays);
         } catch (IOException e) {
             log.error("Erro ao limpar backups antigos", e);
         }

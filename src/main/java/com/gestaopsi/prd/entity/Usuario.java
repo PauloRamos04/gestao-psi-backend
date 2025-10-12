@@ -113,6 +113,14 @@ public class Usuario {
     @Builder.Default
     private Boolean receberNotificacoesSistema = true;
 
+    @Column(name = "lembretes_sessao")
+    @Builder.Default
+    private Boolean lembretesSessao = true;
+
+    @Column(name = "notificacoes_pagamento")
+    @Builder.Default
+    private Boolean notificacoesPagamento = true;
+
     @Column(name = "observacoes", columnDefinition = "TEXT")
     private String observacoes;
 

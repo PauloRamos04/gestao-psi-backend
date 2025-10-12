@@ -49,8 +49,11 @@ public class UsuarioUpdateRequest {
     // Preferências
     private String temaPreferido;
     private String idioma;
+    private String timezone;
     private Boolean receberNotificacoesEmail;
     private Boolean receberNotificacoesSistema;
+    private Boolean lembretesSessao;
+    private Boolean notificacoesPagamento;
 }
 
 

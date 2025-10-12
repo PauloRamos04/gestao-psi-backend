@@ -118,23 +118,61 @@ public class AuthController {
     @PostMapping("/change-password")
     @Operation(summary = "Alterar senha do usuário autenticado")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest req) {
-        Usuario usuario = usuarioRepository.findByUsernameAndStatusTrue(req.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+        try {
+            // Busca o usuário pelo username fornecido
+            Usuario usuario = usuarioRepository.findByUsernameAndStatusTrue(req.getUsername())
+                    .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
-        if (!passwordEncoder.matches(req.getCurrentPassword(), usuario.getSenha())) {
-            return ResponseEntity.badRequest().body("Senha atual incorreta");
+            // Verifica se a senha atual está correta
+            if (!passwordEncoder.matches(req.getCurrentPassword(), usuario.getSenha())) {
+                return ResponseEntity.badRequest().body(new ErrorResponse("Senha atual incorreta"));
+            }
+
+            // Atualiza a senha
+            usuario.setSenha(passwordEncoder.encode(req.getNewPassword()));
+            usuarioRepository.save(usuario);
+            
+            // Registra log de alteração de senha
+            logAuditoriaService.registrarLog(
+                "CHANGE_PASSWORD",
+                "Usuario",
+                usuario.getId(),
+                "Senha alterada com sucesso para o usuário: " + usuario.getUsername()
+            );
+            
+            return ResponseEntity.ok(new SuccessResponse("Senha alterada com sucesso"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            log.error("Erro ao alterar senha", e);
+            logAuditoriaService.registrarErro("Erro ao alterar senha", e);
+            return ResponseEntity.status(500).body(new ErrorResponse("Erro ao alterar senha"));
         }
-
-        usuario.setSenha(passwordEncoder.encode(req.getNewPassword()));
-        usuarioRepository.save(usuario);
-        return ResponseEntity.ok().build();
     }
 
     @Data
     public static class ChangePasswordRequest {
-        private String username; // opcional: se tiver SecurityContext, pode ser omitido
+        private String username;
         private String currentPassword;
         private String newPassword;
+    }
+    
+    @Data
+    public static class SuccessResponse {
+        private final String message;
+        
+        public SuccessResponse(String message) {
+            this.message = message;
+        }
+    }
+    
+    @Data
+    public static class ErrorResponse {
+        private final String message;
+        
+        public ErrorResponse(String message) {
+            this.message = message;
+        }
     }
 }
 

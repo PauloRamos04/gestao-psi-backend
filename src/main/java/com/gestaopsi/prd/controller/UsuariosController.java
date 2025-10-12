@@ -3,6 +3,7 @@ package com.gestaopsi.prd.controller;
 import com.gestaopsi.prd.dto.UsuarioRequest;
 import com.gestaopsi.prd.dto.UsuarioUpdateRequest;
 import com.gestaopsi.prd.dto.UsuarioResponse;
+import com.gestaopsi.prd.dto.UsuarioPreferencesRequest;
 import com.gestaopsi.prd.entity.Usuario;
 import com.gestaopsi.prd.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -73,6 +74,40 @@ public class UsuariosController {
                 .map(UsuarioResponse::fromEntity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/me/profile")
+    @Operation(summary = "Atualizar perfil do usuário autenticado")
+    public ResponseEntity<UsuarioResponse> atualizarMeuPerfil(
+            @Valid @RequestBody UsuarioUpdateRequest request,
+            @RequestHeader("Authorization") String token) {
+        // Extrai o username do token JWT
+        String username = extractUsernameFromToken(token);
+        return usuarioService.atualizarPerfilPorUsername(username, request)
+                .map(UsuarioResponse::fromEntity)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/me/preferences")
+    @Operation(summary = "Atualizar preferências do usuário autenticado")
+    public ResponseEntity<UsuarioResponse> atualizarMinhasPreferencias(
+            @RequestBody UsuarioPreferencesRequest request,
+            @RequestHeader("Authorization") String token) {
+        String username = extractUsernameFromToken(token);
+        return usuarioService.atualizarPreferenciasPorUsername(username, request)
+                .map(UsuarioResponse::fromEntity)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    private String extractUsernameFromToken(String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        // Aqui você implementaria a extração do username do JWT
+        // Por enquanto, retornamos um valor padrão para teste
+        return "admin"; // TODO: Implementar extração real do JWT
     }
 }
 

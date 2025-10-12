@@ -2,6 +2,7 @@ package com.gestaopsi.prd.service;
 
 import com.gestaopsi.prd.dto.UsuarioRequest;
 import com.gestaopsi.prd.dto.UsuarioUpdateRequest;
+import com.gestaopsi.prd.dto.UsuarioPreferencesRequest;
 import com.gestaopsi.prd.entity.Clinica;
 import com.gestaopsi.prd.entity.Psicologo;
 import com.gestaopsi.prd.entity.Role;
@@ -155,6 +156,93 @@ public class UsuarioService {
             
             if (request.getReceberNotificacoesSistema() != null) {
                 usuario.setReceberNotificacoesSistema(request.getReceberNotificacoesSistema());
+            }
+            
+            if (request.getTimezone() != null) {
+                usuario.setTimezone(request.getTimezone());
+            }
+            
+            if (request.getLembretesSessao() != null) {
+                usuario.setLembretesSessao(request.getLembretesSessao());
+            }
+            
+            if (request.getNotificacoesPagamento() != null) {
+                usuario.setNotificacoesPagamento(request.getNotificacoesPagamento());
+            }
+            
+            return usuarioRepository.save(usuario);
+        });
+    }
+
+    @Transactional
+    public Optional<Usuario> atualizarPerfilPorUsername(String username, UsuarioUpdateRequest request) {
+        return usuarioRepository.findByUsernameAndStatusTrue(username).map(usuario -> {
+            // Atualiza apenas campos do perfil (não permite alterar username, senha, etc.)
+            if (request.getNomeCompleto() != null) {
+                usuario.setNomeCompleto(request.getNomeCompleto());
+            }
+            
+            if (request.getEmail() != null) {
+                usuario.setEmail(request.getEmail());
+            }
+            
+            if (request.getTelefone() != null) {
+                usuario.setTelefone(request.getTelefone());
+            }
+            
+            if (request.getCelular() != null) {
+                usuario.setCelular(request.getCelular());
+            }
+            
+            if (request.getCargo() != null) {
+                usuario.setCargo(request.getCargo());
+            }
+            
+            if (request.getDepartamento() != null) {
+                usuario.setDepartamento(request.getDepartamento());
+            }
+            
+            if (request.getFotoUrl() != null) {
+                usuario.setFotoUrl(request.getFotoUrl());
+            }
+            
+            if (request.getObservacoes() != null) {
+                usuario.setObservacoes(request.getObservacoes());
+            }
+            
+            return usuarioRepository.save(usuario);
+        });
+    }
+
+    @Transactional
+    public Optional<Usuario> atualizarPreferenciasPorUsername(String username, UsuarioPreferencesRequest request) {
+        return usuarioRepository.findByUsernameAndStatusTrue(username).map(usuario -> {
+            if (request.getTemaPreferido() != null) {
+                usuario.setTemaPreferido(request.getTemaPreferido());
+            }
+            
+            if (request.getIdioma() != null) {
+                usuario.setIdioma(request.getIdioma());
+            }
+            
+            if (request.getTimezone() != null) {
+                usuario.setTimezone(request.getTimezone());
+            }
+            
+            if (request.getReceberNotificacoesEmail() != null) {
+                usuario.setReceberNotificacoesEmail(request.getReceberNotificacoesEmail());
+            }
+            
+            if (request.getReceberNotificacoesSistema() != null) {
+                usuario.setReceberNotificacoesSistema(request.getReceberNotificacoesSistema());
+            }
+            
+            if (request.getLembretesSessao() != null) {
+                usuario.setLembretesSessao(request.getLembretesSessao());
+            }
+            
+            if (request.getNotificacoesPagamento() != null) {
+                usuario.setNotificacoesPagamento(request.getNotificacoesPagamento());
             }
             
             return usuarioRepository.save(usuario);

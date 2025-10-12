@@ -18,10 +18,14 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CorsConfigurationSource corsConfigurationSource;
+    private final MaintenanceModeFilter maintenanceModeFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, CorsConfigurationSource corsConfigurationSource) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, 
+                         CorsConfigurationSource corsConfigurationSource,
+                         MaintenanceModeFilter maintenanceModeFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.corsConfigurationSource = corsConfigurationSource;
+        this.maintenanceModeFilter = maintenanceModeFilter;
     }
 
     @Bean
@@ -36,6 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/api-docs/**", "/h2-console/**").permitAll()
                 .anyRequest().authenticated()
             )
+            .addFilterBefore(maintenanceModeFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

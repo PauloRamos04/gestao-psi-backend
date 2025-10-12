@@ -21,6 +21,29 @@ public class UsuarioResponse {
     private String clinicaNome;
     private String psicologoNome;
     private String tipoNome;
+    
+    // Informações pessoais
+    private String nomeCompleto;
+    private String email;
+    private String telefone;
+    private String celular;
+    private String cargo;
+    private String departamento;
+    private String fotoUrl;
+    private String observacoes;
+    
+    // Preferências
+    private String temaPreferido;
+    private String idioma;
+    private String timezone;
+    private Boolean receberNotificacoesEmail;
+    private Boolean receberNotificacoesSistema;
+    private Boolean lembretesSessao;
+    private Boolean notificacoesPagamento;
+    
+    // Controle
+    private String ultimoAccesso;
+    private String dataCriacao;
 
     public static UsuarioResponse fromEntity(Usuario usuario) {
         return UsuarioResponse.builder()
@@ -34,6 +57,26 @@ public class UsuarioResponse {
                 .clinicaNome(usuario.getClinica() != null ? usuario.getClinica().getNome() : null)
                 .psicologoNome(usuario.getPsicologo() != null ? usuario.getPsicologo().getNome() : null)
                 .tipoNome(usuario.getTipo() != null ? usuario.getTipo().getNome() : null)
+                // Informações pessoais
+                .nomeCompleto(usuario.getNomeCompleto())
+                .email(usuario.getEmail())
+                .telefone(usuario.getTelefone())
+                .celular(usuario.getCelular())
+                .cargo(usuario.getCargo())
+                .departamento(usuario.getDepartamento())
+                .fotoUrl(usuario.getFotoUrl())
+                .observacoes(usuario.getObservacoes())
+                // Preferências
+                .temaPreferido(usuario.getTemaPreferido())
+                .idioma(usuario.getIdioma())
+                .timezone(usuario.getTimezone())
+                .receberNotificacoesEmail(usuario.getReceberNotificacoesEmail())
+                .receberNotificacoesSistema(usuario.getReceberNotificacoesSistema())
+                .lembretesSessao(usuario.getLembretesSessao())
+                .notificacoesPagamento(usuario.getNotificacoesPagamento())
+                // Controle
+                .ultimoAccesso(usuario.getUltimoAccesso() != null ? usuario.getUltimoAccesso().toString() : null)
+                .dataCriacao(usuario.getDataCriacao() != null ? usuario.getDataCriacao().toString() : null)
                 .build();
     }
 }
