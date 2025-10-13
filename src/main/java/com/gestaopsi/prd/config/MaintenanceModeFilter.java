@@ -22,7 +22,7 @@ import java.util.Map;
  * Filtro que verifica se o sistema está em modo de manutenção
  * Bloqueia todas as requisições exceto para usuários ADMINISTRADOR
  */
-@Component
+// @Component - DESABILITADO temporariamente para permitir startup
 @RequiredArgsConstructor
 @Slf4j
 public class MaintenanceModeFilter extends OncePerRequestFilter {
