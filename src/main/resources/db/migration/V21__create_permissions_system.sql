@@ -148,3 +148,4 @@ AND p.modulo IN ('pacientes', 'sessoes', 'pagamentos')
 AND p.acao IN ('ler', 'criar')
 ON CONFLICT DO NOTHING;
 
+

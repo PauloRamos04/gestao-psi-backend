@@ -37,3 +37,4 @@ public class SystemConfig extends BaseEntity {
     private Boolean isEncrypted = false;
 }
 
+

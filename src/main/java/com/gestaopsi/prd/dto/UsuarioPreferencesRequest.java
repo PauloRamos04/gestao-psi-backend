@@ -19,3 +19,4 @@ public class UsuarioPreferencesRequest {
     private Boolean notificacoesPagamento;
 }
 
+

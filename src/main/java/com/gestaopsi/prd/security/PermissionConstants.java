@@ -46,3 +46,4 @@ public class PermissionConstants {
     public static final String ROLE_FINANCEIRO = "ROLE_FINANCEIRO";
 }
 
+

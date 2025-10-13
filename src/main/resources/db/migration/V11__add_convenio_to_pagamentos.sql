@@ -28,3 +28,4 @@ COMMENT ON COLUMN pagamentos.valor_coparticipacao IS 'Valor de coparticipação 
 
 
 
+

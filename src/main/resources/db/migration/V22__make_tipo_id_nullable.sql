@@ -3,3 +3,4 @@
 
 ALTER TABLE users MODIFY COLUMN tipo_id BIGINT NULL;
 
+

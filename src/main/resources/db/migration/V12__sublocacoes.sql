@@ -19,3 +19,4 @@ create index if not exists idx_sublocacoes_clinica on sublocacoes(clinica_id);
 
 
 
+

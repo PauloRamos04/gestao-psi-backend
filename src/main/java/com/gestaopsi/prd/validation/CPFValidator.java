@@ -19,3 +19,4 @@ public class CPFValidator implements ConstraintValidator<CPF, String> {
     }
 }
 
+

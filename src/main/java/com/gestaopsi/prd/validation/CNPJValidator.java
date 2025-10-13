@@ -19,3 +19,4 @@ public class CNPJValidator implements ConstraintValidator<CNPJ, String> {
     }
 }
 
+

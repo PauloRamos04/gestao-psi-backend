@@ -26,3 +26,4 @@ COMMENT ON COLUMN system_config.description IS 'Descrição da configuração';
 COMMENT ON COLUMN system_config.category IS 'Categoria da configuração (SYSTEM, EMAIL, SECURITY, NOTIFICATIONS, BACKUP, LOGS)';
 COMMENT ON COLUMN system_config.is_encrypted IS 'Indica se o valor está criptografado';
 
+

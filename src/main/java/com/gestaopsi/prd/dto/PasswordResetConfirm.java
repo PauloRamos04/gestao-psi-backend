@@ -15,3 +15,4 @@ public class PasswordResetConfirm {
     private String newPassword;
 }
 
+

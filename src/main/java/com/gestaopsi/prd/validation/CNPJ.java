@@ -15,3 +15,4 @@ public @interface CNPJ {
     Class<? extends Payload>[] payload() default {};
 }
 
+
