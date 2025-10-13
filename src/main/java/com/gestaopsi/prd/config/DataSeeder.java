@@ -61,19 +61,13 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try {
-            logger.info("🌱 Iniciando seeder de dados...");
-
             // Inicializar configurações do sistema (sempre executa)
-            logger.info("⚙️ Inicializando configurações do sistema...");
             systemConfigService.initializeDefaultConfigs();
 
             // Verificar se já existe dados
             if (clinicaRepository.count() > 0) {
-                logger.info("✅ Dados já existem. Pulando seeder.");
                 return;
             }
-
-            logger.info("📝 Criando dados iniciais...");
             criarDadosIniciais();
         } catch (Exception e) {
             logger.error("❌ Erro ao executar seeder: {}", e.getMessage());
@@ -88,19 +82,16 @@ public class DataSeeder implements CommandLineRunner {
             .nome("ADMIN")
             .build();
         tipoAdmin = tipoUserRepository.save(tipoAdmin);
-        logger.info("✅ Tipo criado: ADMIN (ID: {})", tipoAdmin.getId());
 
         TipoUser tipoPsicologo = TipoUser.builder()
             .nome("PSICOLOGO")
             .build();
         tipoPsicologo = tipoUserRepository.save(tipoPsicologo);
-        logger.info("✅ Tipo criado: PSICOLOGO (ID: {})", tipoPsicologo.getId());
 
         TipoUser tipoFuncionario = TipoUser.builder()
             .nome("FUNCIONARIO")
             .build();
         tipoFuncionario = tipoUserRepository.save(tipoFuncionario);
-        logger.info("✅ Tipo criado: FUNCIONARIO (ID: {})", tipoFuncionario.getId());
 
         // 2. Criar Roles Padrões
         Role roleAdmin = Role.builder()
@@ -110,7 +101,6 @@ public class DataSeeder implements CommandLineRunner {
             .sistema(true)
             .build();
         roleAdmin = roleRepository.save(roleAdmin);
-        logger.info("✅ Role criada: ADMIN (ID: {})", roleAdmin.getId());
 
         Role rolePsicologo = Role.builder()
             .nome("PSICOLOGO")
@@ -119,7 +109,6 @@ public class DataSeeder implements CommandLineRunner {
             .sistema(true)
             .build();
         rolePsicologo = roleRepository.save(rolePsicologo);
-        logger.info("✅ Role criada: PSICOLOGO (ID: {})", rolePsicologo.getId());
 
         Role roleFuncionario = Role.builder()
             .nome("FUNCIONARIO")
@@ -128,7 +117,6 @@ public class DataSeeder implements CommandLineRunner {
             .sistema(true)
             .build();
         roleFuncionario = roleRepository.save(roleFuncionario);
-        logger.info("✅ Role criada: FUNCIONARIO (ID: {})", roleFuncionario.getId());
 
         Role roleSecretaria = Role.builder()
             .nome("SECRETARIA")
@@ -137,7 +125,6 @@ public class DataSeeder implements CommandLineRunner {
             .sistema(true)
             .build();
         roleSecretaria = roleRepository.save(roleSecretaria);
-        logger.info("✅ Role criada: SECRETARIA (ID: {})", roleSecretaria.getId());
 
         // 3. Criar Permissões Padrões
         criarPermissoesPadroes(roleAdmin, rolePsicologo, roleFuncionario, roleSecretaria);
@@ -147,38 +134,32 @@ public class DataSeeder implements CommandLineRunner {
             .nome("PIX")
             .build();
         tipoPix = tipoPagamentoRepository.save(tipoPix);
-        logger.info("✅ Tipo de pagamento criado: PIX (ID: {})", tipoPix.getId());
 
         TipoPagamento tipoDinheiro = TipoPagamento.builder()
             .nome("DINHEIRO")
             .build();
         tipoDinheiro = tipoPagamentoRepository.save(tipoDinheiro);
-        logger.info("✅ Tipo de pagamento criado: DINHEIRO (ID: {})", tipoDinheiro.getId());
 
         TipoPagamento tipoCartao = TipoPagamento.builder()
             .nome("CARTAO_CREDITO")
             .build();
         tipoCartao = tipoPagamentoRepository.save(tipoCartao);
-        logger.info("✅ Tipo de pagamento criado: CARTAO_CREDITO (ID: {})", tipoCartao.getId());
 
         TipoPagamento tipoDebito = TipoPagamento.builder()
             .nome("CARTAO_DEBITO")
             .build();
         tipoDebito = tipoPagamentoRepository.save(tipoDebito);
-        logger.info("✅ Tipo de pagamento criado: CARTAO_DEBITO (ID: {})", tipoDebito.getId());
 
         TipoPagamento tipoTransferencia = TipoPagamento.builder()
             .nome("TRANSFERENCIA")
             .build();
         tipoTransferencia = tipoPagamentoRepository.save(tipoTransferencia);
-        logger.info("✅ Tipo de pagamento criado: TRANSFERENCIA (ID: {})", tipoTransferencia.getId());
 
         // 3. Criar Categorias
         Categoria categoria = Categoria.builder()
             .nome("PSICOLOGO_CLINICO")
             .build();
         categoria = categoriaRepository.save(categoria);
-        logger.info("✅ Categoria criada: PSICOLOGO_CLINICO (ID: {})", categoria.getId());
 
         Categoria categoriaOrg = Categoria.builder()
             .nome("PSICOLOGO_ORGANIZACIONAL")
@@ -203,7 +184,6 @@ public class DataSeeder implements CommandLineRunner {
             .titulo("Clínica Administrativa")
             .build();
         clinicaAdmin = clinicaRepository.save(clinicaAdmin);
-        logger.info("✅ Clínica criada: {} (login: {})", clinicaAdmin.getNome(), clinicaAdmin.getClinicaLogin());
 
         Clinica clinicaTeste = Clinica.builder()
             .clinicaLogin("teste")
@@ -212,7 +192,6 @@ public class DataSeeder implements CommandLineRunner {
             .titulo("Clínica de Testes")
             .build();
         clinicaTeste = clinicaRepository.save(clinicaTeste);
-        logger.info("✅ Clínica criada: {} (login: {})", clinicaTeste.getNome(), clinicaTeste.getClinicaLogin());
 
         // 5. Criar Psicólogos de Teste
         Psicologo psicologoAdmin = Psicologo.builder()
@@ -225,7 +204,6 @@ public class DataSeeder implements CommandLineRunner {
             .categoria(categoria)
             .build();
         psicologoAdmin = psicologoRepository.save(psicologoAdmin);
-        logger.info("✅ Psicólogo criado: {} (login: {})", psicologoAdmin.getNome(), psicologoAdmin.getPsicologLogin());
 
         Psicologo psicologoTeste = Psicologo.builder()
             .psicologLogin("teste")
@@ -237,7 +215,6 @@ public class DataSeeder implements CommandLineRunner {
             .categoria(categoria)
             .build();
         psicologoTeste = psicologoRepository.save(psicologoTeste);
-        logger.info("✅ Psicólogo criado: {} (login: {})", psicologoTeste.getNome(), psicologoTeste.getPsicologLogin());
 
         // 6. Criar Usuários de Teste
         Usuario usuarioAdmin = Usuario.builder()
@@ -255,7 +232,6 @@ public class DataSeeder implements CommandLineRunner {
             .cargo("Administrador")
             .build();
         usuarioAdmin = usuarioRepository.save(usuarioAdmin);
-        logger.info("✅ Usuário criado: {} (ID: {})", usuarioAdmin.getUsername(), usuarioAdmin.getId());
 
         Usuario usuarioTeste = Usuario.builder()
             .username("teste")
@@ -272,7 +248,6 @@ public class DataSeeder implements CommandLineRunner {
             .cargo("Psicólogo")
             .build();
         usuarioTeste = usuarioRepository.save(usuarioTeste);
-        logger.info("✅ Usuário criado: {} (ID: {})", usuarioTeste.getUsername(), usuarioTeste.getId());
 
         // 7. Criar Pacientes de Teste
         Paciente paciente1 = Paciente.builder()
@@ -296,7 +271,6 @@ public class DataSeeder implements CommandLineRunner {
             .status(true)
             .build();
         paciente1 = pacienteRepository.save(paciente1);
-        logger.info("✅ Paciente criado: {} (CPF: {})", paciente1.getNome(), paciente1.getCpf());
 
         Paciente paciente2 = Paciente.builder()
             .nome("Maria Oliveira Costa")
@@ -319,7 +293,6 @@ public class DataSeeder implements CommandLineRunner {
             .status(true)
             .build();
         paciente2 = pacienteRepository.save(paciente2);
-        logger.info("✅ Paciente criado: {} (CPF: {})", paciente2.getNome(), paciente2.getCpf());
 
         // 8. Criar Salas de Teste
         Sala sala1 = Sala.builder()
@@ -330,7 +303,6 @@ public class DataSeeder implements CommandLineRunner {
             .ativa(true)
             .build();
         sala1 = salaRepository.save(sala1);
-        logger.info("✅ Sala criada: {} (ID: {})", sala1.getNome(), sala1.getId());
 
         Sala sala2 = Sala.builder()
             .nome("Sala 2 - Grupo")
@@ -340,27 +312,6 @@ public class DataSeeder implements CommandLineRunner {
             .ativa(true)
             .build();
         sala2 = salaRepository.save(sala2);
-        logger.info("✅ Sala criada: {} (ID: {})", sala2.getNome(), sala2.getId());
-
-        logger.info("");
-        logger.info("=================================================");
-        logger.info("🎉 DADOS INICIAIS CRIADOS COM SUCESSO!");
-        logger.info("=================================================");
-        logger.info("📋 Credenciais de acesso ADMIN:");
-        logger.info("   Username: admin");
-        logger.info("   Senha: admin");
-        logger.info("   Clínica: admin");
-        logger.info("");
-        logger.info("📋 Credenciais de acesso TESTE:");
-        logger.info("   Username: teste");
-        logger.info("   Senha: teste");
-        logger.info("   Clínica: teste");
-        logger.info("");
-        logger.info("🏥 Clínicas criadas:");
-        logger.info("   - {} (login: {})", clinicaAdmin.getNome(), clinicaAdmin.getClinicaLogin());
-        logger.info("   - {} (login: {})", clinicaTeste.getNome(), clinicaTeste.getClinicaLogin());
-        logger.info("=================================================");
-        logger.info("");
     }
 
     private void criarPermissoesPadroes(Role roleAdmin, Role rolePsicologo, Role roleFuncionario, Role roleSecretaria) {
@@ -386,10 +337,6 @@ public class DataSeeder implements CommandLineRunner {
         // Atribuir permissões básicas às roles
         atribuirPermissoesBasicas(roleAdmin, rolePsicologo, roleFuncionario, roleSecretaria);
 
-        logger.info("✅ Permissões básicas criadas e atribuídas");
-        logger.info("   - {} módulos", modulos.length);
-        logger.info("   - {} ações por módulo", acoes.length);
-        logger.info("   - Total: {} permissões", modulos.length * acoes.length);
     }
 
     private void atribuirPermissoesBasicas(Role roleAdmin, Role rolePsicologo, Role roleFuncionario, Role roleSecretaria) {
@@ -399,10 +346,8 @@ public class DataSeeder implements CommandLineRunner {
             
             // Buscar todas as permissões criadas
             var todasPermissoes = permissionRepository.findAll();
-            logger.info("📊 Total de permissões encontradas: {}", todasPermissoes.size());
             
             if (todasPermissoes.isEmpty()) {
-                logger.warn("⚠️ Nenhuma permissão encontrada para atribuir às roles");
                 return;
             }
             
@@ -410,7 +355,6 @@ public class DataSeeder implements CommandLineRunner {
             var permissoesAdmin = new java.util.HashSet<>(todasPermissoes);
             roleAdmin.setPermissions(permissoesAdmin);
             roleAdmin = roleRepository.save(roleAdmin);
-            logger.info("✅ ADMIN: {} permissões atribuídas", permissoesAdmin.size());
             
             // PSICOLOGO recebe permissões específicas
             var permissoesPsicologo = todasPermissoes.stream()
@@ -424,7 +368,6 @@ public class DataSeeder implements CommandLineRunner {
             
             rolePsicologo.setPermissions(permissoesPsicologo);
             rolePsicologo = roleRepository.save(rolePsicologo);
-            logger.info("✅ PSICOLOGO: {} permissões atribuídas", permissoesPsicologo.size());
             
             // FUNCIONARIO recebe permissões limitadas
             var permissoesFuncionario = todasPermissoes.stream()
@@ -436,7 +379,6 @@ public class DataSeeder implements CommandLineRunner {
             
             roleFuncionario.setPermissions(permissoesFuncionario);
             roleFuncionario = roleRepository.save(roleFuncionario);
-            logger.info("✅ FUNCIONARIO: {} permissões atribuídas", permissoesFuncionario.size());
             
             // SECRETARIA recebe permissões administrativas
             var permissoesSecretaria = todasPermissoes.stream()
@@ -451,7 +393,6 @@ public class DataSeeder implements CommandLineRunner {
             
             roleSecretaria.setPermissions(permissoesSecretaria);
             roleSecretaria = roleRepository.save(roleSecretaria);
-            logger.info("✅ SECRETARIA: {} permissões atribuídas", permissoesSecretaria.size());
             
             // Verificar se as permissões foram realmente atribuídas
             verificarPermissoesAtribuidas(roleAdmin, rolePsicologo, roleFuncionario, roleSecretaria);
@@ -468,12 +409,6 @@ public class DataSeeder implements CommandLineRunner {
             var psicologoComPermissoes = roleRepository.findByIdWithPermissions(rolePsicologo.getId());
             var funcionarioComPermissoes = roleRepository.findByIdWithPermissions(roleFuncionario.getId());
             var secretariaComPermissoes = roleRepository.findByIdWithPermissions(roleSecretaria.getId());
-            
-            logger.info("🔍 VERIFICAÇÃO FINAL:");
-            logger.info("   ADMIN: {} permissões no banco", adminComPermissoes.map(r -> r.getPermissions().size()).orElse(0));
-            logger.info("   PSICOLOGO: {} permissões no banco", psicologoComPermissoes.map(r -> r.getPermissions().size()).orElse(0));
-            logger.info("   FUNCIONARIO: {} permissões no banco", funcionarioComPermissoes.map(r -> r.getPermissions().size()).orElse(0));
-            logger.info("   SECRETARIA: {} permissões no banco", secretariaComPermissoes.map(r -> r.getPermissions().size()).orElse(0));
             
         } catch (Exception e) {
             logger.error("❌ Erro ao verificar permissões: {}", e.getMessage());
