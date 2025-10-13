@@ -19,13 +19,16 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CorsConfigurationSource corsConfigurationSource;
     private final MaintenanceModeFilter maintenanceModeFilter;
+    private final RateLimitFilter rateLimitFilter;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, 
                          CorsConfigurationSource corsConfigurationSource,
-                         MaintenanceModeFilter maintenanceModeFilter) {
+                         MaintenanceModeFilter maintenanceModeFilter,
+                         RateLimitFilter rateLimitFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.corsConfigurationSource = corsConfigurationSource;
         this.maintenanceModeFilter = maintenanceModeFilter;
+        this.rateLimitFilter = rateLimitFilter;
     }
 
     @Bean
@@ -37,9 +40,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/mensagens", "/mensagens/todas").permitAll()
-                .requestMatchers("/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/api-docs/**", "/h2-console/**").permitAll()
+                .requestMatchers("/auth/**", "/api/auth/**", "/ws/**", "/swagger-ui.html", "/swagger-ui/**", "/api-docs/**", "/h2-console/**", "/debug/**", "/test/**").permitAll()
                 .anyRequest().authenticated()
             )
+            .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(maintenanceModeFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

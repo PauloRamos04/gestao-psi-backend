@@ -17,6 +17,9 @@ public class LoginRequest {
 
     @NotBlank(message = "Senha é obrigatória")
     private String password;
+    
+    @NotBlank(message = "Login da clínica é obrigatório")
+    private String clinicaLogin;
 }
 
 

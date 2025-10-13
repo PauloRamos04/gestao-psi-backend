@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
@@ -32,6 +33,11 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
         @Param("clinicaId") Integer clinicaId, 
         @Param("psicologId") Integer psicologId
     );
+    
+    // Métodos para importação
+    Optional<Paciente> findByCpf(String cpf);
+    boolean existsByCpf(String cpf);
+    boolean existsByEmail(String email);
 }
 
 

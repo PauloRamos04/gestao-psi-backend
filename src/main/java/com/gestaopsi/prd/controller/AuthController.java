@@ -46,7 +46,8 @@ public class AuthController {
         try {
             Optional<Usuario> usuarioOpt = authService.authenticate(
                 loginRequest.getUsername(),
-                loginRequest.getPassword()
+                loginRequest.getPassword(),
+                loginRequest.getClinicaLogin()
             );
 
             if (usuarioOpt.isPresent()) {
@@ -72,7 +73,7 @@ public class AuthController {
                         usuario.getPsicologo() != null ? usuario.getPsicologo().getId() : null
                 );
                 response.setTipoUser(
-                        usuario.getTipo() != null ? String.valueOf(usuario.getTipo().getId()) : null
+                        usuario.getTipo() != null ? usuario.getTipo().getNome() : null
                 );
                 response.setClinicaNome(
                         usuario.getClinica() != null ? usuario.getClinica().getNome() : null

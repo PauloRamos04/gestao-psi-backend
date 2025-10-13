@@ -3,6 +3,7 @@ package com.gestaopsi.prd.controller;
 import com.gestaopsi.prd.dto.SystemConfigRequest;
 import com.gestaopsi.prd.dto.SystemConfigResponse;
 import com.gestaopsi.prd.service.SystemConfigService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

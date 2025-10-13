@@ -36,8 +36,8 @@ public class Usuario {
     private Psicologo psicologo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_id", nullable = false)
-    private TipoUser tipo;
+    @JoinColumn(name = "tipo_id")
+    private TipoUser tipo; // Legado - agora usa role
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
@@ -138,5 +138,10 @@ public class Usuario {
     @Transient
     public Integer getTipoId() {
         return tipo != null ? tipo.getId().intValue() : null;
+    }
+
+    @Transient
+    public Integer getRoleId() {
+        return role != null ? role.getId().intValue() : null;
     }
 }

@@ -48,12 +48,24 @@ public class UsuarioService {
         Psicologo psicologo = psicologoRepository.findById(request.getPsicologId())
                 .orElseThrow(() -> new IllegalArgumentException("Psicólogo não encontrado"));
         
-        TipoUser tipo = tipoUserRepository.findById(request.getTipoId())
-                .orElseThrow(() -> new IllegalArgumentException("Tipo de usuário não encontrado"));
+        // TipoUser agora é opcional (sistema migra para roles)
+        TipoUser tipo = null;
+        if (request.getTipoId() != null) {
+            tipo = tipoUserRepository.findById(request.getTipoId()).orElse(null);
+        }
         
+        // Role é obrigatória no novo sistema
         Role role = null;
         if (request.getRoleId() != null) {
             role = roleRepository.findById(request.getRoleId()).orElse(null);
+        }
+        
+        // Se não tiver role, buscar tipo padrão ADMIN para compatibilidade
+        if (role == null && tipo == null) {
+            tipo = tipoUserRepository.findAll().stream()
+                .filter(t -> "ADMIN".equals(t.getNome()))
+                .findFirst()
+                .orElse(null);
         }
         
         Usuario usuario = Usuario.builder()

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            color: #1976d2;
+            margin-bottom: 30px;
+        }
+        .session-info {
+            background-color: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #1976d2;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⏰ Lembrete de Sessão</h1>
+        </div>
+        
+        <p>Olá, <strong th:text="${userName}">Usuário</strong>!</p>
+        
+        <p>Este é um lembrete sobre sua próxima sessão:</p>
+        
+        <div class="session-info">
+            <p><strong>📅 Data:</strong> <span th:text="${sessionDate}">01/01/2024</span></p>
+            <p><strong>🕐 Horário:</strong> <span th:text="${sessionTime}">10:00</span></p>
+            <p><strong>👨‍⚕️ Psicólogo(a):</strong> <span th:text="${psychologistName}">Nome</span></p>
+        </div>
+        
+        <p>Por favor, chegue com alguns minutos de antecedência.</p>
+        
+        <div style="text-align: center;">
+            <a th:href="${frontendUrl}" class="button">Acessar Agenda</a>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2024 GestaoPsi - Sistema de Gestão para Clínicas de Psicologia</p>
+        </div>
+    </div>
+</body>
+</html>
+

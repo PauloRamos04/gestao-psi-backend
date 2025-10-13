@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            color: #1976d2;
+            margin-bottom: 30px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #1976d2;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 Bem-vindo ao GestaoPsi!</h1>
+        </div>
+        
+        <p>Olá, <strong th:text="${userName}">Usuário</strong>!</p>
+        
+        <p>É com grande satisfação que damos as boas-vindas ao <strong>GestaoPsi</strong>, seu sistema completo de gestão para clínicas de psicologia.</p>
+        
+        <p>Com o GestaoPsi, você terá acesso a:</p>
+        <ul>
+            <li>📅 Agenda integrada</li>
+            <li>📋 Prontuários eletrônicos</li>
+            <li>💰 Controle financeiro</li>
+            <li>📊 Relatórios e estatísticas</li>
+            <li>🔒 Segurança e privacidade</li>
+        </ul>
+        
+        <div style="text-align: center;">
+            <a th:href="${frontendUrl}" class="button">Acessar o Sistema</a>
+        </div>
+        
+        <p>Se você tiver alguma dúvida, nossa equipe de suporte está à disposição para ajudá-lo.</p>
+        
+        <div class="footer">
+            <p>&copy; 2024 GestaoPsi - Sistema de Gestão para Clínicas de Psicologia</p>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -231,7 +231,16 @@ public class SystemConfigService {
     
     private void updateConfig(String key, String value, boolean isEncrypted) {
         SystemConfig config = systemConfigRepository.findByConfigKey(key)
-            .orElseThrow(() -> new RuntimeException("Configuração não encontrada: " + key));
+            .orElseGet(() -> {
+                log.warn("Configuração não encontrada: {}. Criando nova configuração.", key);
+                SystemConfig newConfig = new SystemConfig();
+                newConfig.setConfigKey(key);
+                newConfig.setConfigType("STRING");
+                newConfig.setDescription("Auto-criada");
+                newConfig.setCategory(key.split("\\.")[0].toUpperCase());
+                newConfig.setIsEncrypted(isEncrypted);
+                return newConfig;
+            });
         
         if (isEncrypted && value != null && !value.isEmpty()) {
             config.setConfigValue(encrypt(value));
@@ -239,8 +248,12 @@ public class SystemConfigService {
             config.setConfigValue(value);
         }
         
-        systemConfigRepository.save(config);
-        log.info("Configuração atualizada: {} = {}", key, isEncrypted ? "***" : value);
+        config = systemConfigRepository.save(config);
+        log.info("Configuração {} [ID: {}]: {} = {}", 
+                 config.getId() == null ? "criada" : "atualizada",
+                 config.getId(), 
+                 key, 
+                 isEncrypted ? "***" : value);
     }
     
     private String getConfigValue(String key, String defaultValue) {

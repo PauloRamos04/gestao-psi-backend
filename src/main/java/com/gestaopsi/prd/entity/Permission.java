@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "permissions")
 @Data
@@ -18,23 +21,23 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
+    @Column(unique = true, nullable = false, length = 100)
+    private String nome; // Ex: usuarios.criar, pacientes.editar, sessoes.deletar
+
+    @Column(length = 200)
+    private String descricao;
+
+    @Column(length = 50)
+    private String modulo; // Ex: usuarios, pacientes, sessoes, pagamentos, etc
+
+    @Column(length = 50)
+    private String acao; // Ex: criar, ler, editar, deletar, exportar
 
     @Column(nullable = false)
-    private String recurso; // PACIENTES, SESSOES, PAGAMENTOS, etc
+    @Builder.Default
+    private Boolean ativo = true;
 
-    @Column(nullable = false)
-    private Boolean ler = false;
-
-    @Column(nullable = false)
-    private Boolean criar = false;
-
-    @Column(nullable = false)
-    private Boolean editar = false;
-
-    @Column(nullable = false)
-    private Boolean deletar = false;
+    @ManyToMany(mappedBy = "permissions")
+    @Builder.Default
+    private Set<Role> roles = new HashSet<>();
 }
-

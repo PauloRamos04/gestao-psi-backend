@@ -14,6 +14,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Novo método de autenticação por username
     Optional<Usuario> findByUsernameAndStatusTrue(String username);
 
+    // Buscar usuário por email
+    Optional<Usuario> findByEmail(String email);
+
     // Buscar usuário por psicólogo ID
     Optional<Usuario> findByPsicologoId(Long psicologoId);
 

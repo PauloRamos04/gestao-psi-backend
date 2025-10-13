@@ -22,7 +22,7 @@ public class UsuarioRequest {
     @NotNull(message = "ID do psicólogo é obrigatório")
     private Long psicologId;
     
-    @NotNull(message = "ID do tipo de usuário é obrigatório")
+    // tipoId agora é opcional - sistema migra para roles
     private Long tipoId;
     
     @NotBlank(message = "Senha é obrigatória")

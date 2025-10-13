@@ -9,10 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
-/**
- * Configuração de auditoria JPA
- * Rastreia automaticamente quem criou/modificou entities
- */
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class JpaAuditingConfig {
@@ -22,12 +18,12 @@ public class JpaAuditingConfig {
         return () -> {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             
-            if (authentication == null || !authentication.isAuthenticated()) {
-                return Optional.of("system");
+            if (authentication == null || !authentication.isAuthenticated() || 
+                authentication.getPrincipal().equals("anonymousUser")) {
+                return Optional.of("SYSTEM");
             }
             
-            return Optional.ofNullable(authentication.getName());
+            return Optional.of(authentication.getName());
         };
     }
 }
-
