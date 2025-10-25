@@ -15,7 +15,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByUsernameAndStatusTrue(String username);
     
     // Método com fetch join para evitar LazyInitializationException
-    @Query("SELECT u FROM Usuario u JOIN FETCH u.clinica WHERE u.username = :username AND u.status = true")
+    @Query("SELECT u FROM Usuario u JOIN FETCH u.clinica JOIN FETCH u.tipo JOIN FETCH u.psicologo WHERE u.username = :username AND u.status = true")
     Optional<Usuario> findByUsernameAndStatusTrueWithClinica(@Param("username") String username);
 
     // Buscar usuário por email
