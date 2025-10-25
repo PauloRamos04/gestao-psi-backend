@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 @Component
-@Profile({"dev", "default"})  // Só executa em desenvolvimento, não em produção
+@Profile({"dev", "default", "prod"})  // Executa em todos os ambientes
 public class DataSeeder implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(DataSeeder.class);
