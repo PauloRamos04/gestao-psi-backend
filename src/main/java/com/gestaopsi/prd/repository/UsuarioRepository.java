@@ -13,6 +13,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     // Novo método de autenticação por username
     Optional<Usuario> findByUsernameAndStatusTrue(String username);
+    
+    // Método com fetch join para evitar LazyInitializationException
+    @Query("SELECT u FROM Usuario u JOIN FETCH u.clinica WHERE u.username = :username AND u.status = true")
+    Optional<Usuario> findByUsernameAndStatusTrueWithClinica(@Param("username") String username);
 
     // Buscar usuário por email
     Optional<Usuario> findByEmail(String email);

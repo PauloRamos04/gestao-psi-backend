@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -20,6 +21,7 @@ public class AuthService {
     private final ClinicaService clinicaService;
 
     // Método de autenticação com validação obrigatória de clínica
+    @Transactional(readOnly = true)
     public Optional<Usuario> authenticate(String username, String senha, String clinicaLogin) {
         log.info("Tentando autenticar usuário: {} na clínica: {}", username, clinicaLogin);
         
@@ -30,7 +32,7 @@ public class AuthService {
             return Optional.empty();
         }
         
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsernameAndStatusTrue(username);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsernameAndStatusTrueWithClinica(username);
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
             
