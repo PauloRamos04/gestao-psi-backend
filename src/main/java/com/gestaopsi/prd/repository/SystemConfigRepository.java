@@ -15,3 +15,5 @@ public interface SystemConfigRepository extends JpaRepository<SystemConfig, Long
 }
 
 
+
+
