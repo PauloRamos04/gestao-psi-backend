@@ -19,10 +19,12 @@ Simplificamos a configuração para usar diretamente as variáveis do Railway.
 # Perfil da aplicação
 SPRING_PROFILES_ACTIVE=prod
 
-# Banco de Dados PostgreSQL
-DATABASE_URL=jdbc:postgresql://${{Postgres.RAILWAY_PRIVATE_DOMAIN}}:${{Postgres.PGPORT}}/${{Postgres.PGDATABASE}}?sslmode=require
-DATABASE_USER=${{Postgres.PGUSER}}
-DB_PASSWORD=${{Postgres.PGPASSWORD}}
+# Banco de Dados PostgreSQL (variáveis individuais)
+PGHOST=${{Postgres.RAILWAY_PRIVATE_DOMAIN}}
+PGPORT=${{Postgres.PGPORT}}
+PGDATABASE=${{Postgres.PGDATABASE}}
+PGUSER=${{Postgres.PGUSER}}
+PGPASSWORD=${{Postgres.PGPASSWORD}}
 
 # JWT Secret
 JWT_SECRET=x3Q8zvDks7pR9G2Nf4bC1mX8Yt6uVa5wZq7Lr9P0sT2U4V6X8Z0a2c4e6g8i0k2
