@@ -65,11 +65,23 @@ public class DataSeeder implements CommandLineRunner {
         try {
             logger.info("🌱 Iniciando DataSeeder...");
             
+            // Timeout de 60 segundos para evitar travamento
+            long startTime = System.currentTimeMillis();
+            long timeout = 60000; // 60 segundos
+            
             // Inicializar configurações do sistema (sempre executa)
+            logger.info("⚙️ Inicializando configurações do sistema...");
             systemConfigService.initializeDefaultConfigs();
             logger.info("✅ Configurações do sistema inicializadas");
 
+            // Verificar timeout
+            if (System.currentTimeMillis() - startTime > timeout) {
+                logger.warn("⏰ Timeout atingido durante inicialização");
+                return;
+            }
+
             // Verificar se já existe dados
+            logger.info("🔍 Verificando dados existentes...");
             long clinicaCount = clinicaRepository.count();
             logger.info("📊 Clínicas existentes: {}", clinicaCount);
             
