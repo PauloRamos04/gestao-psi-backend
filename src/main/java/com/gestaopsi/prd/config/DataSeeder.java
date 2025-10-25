@@ -61,21 +61,33 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try {
+            logger.info("🌱 Iniciando DataSeeder...");
+            
             // Inicializar configurações do sistema (sempre executa)
             systemConfigService.initializeDefaultConfigs();
+            logger.info("✅ Configurações do sistema inicializadas");
 
             // Verificar se já existe dados
-            if (clinicaRepository.count() > 0) {
+            long clinicaCount = clinicaRepository.count();
+            logger.info("📊 Clínicas existentes: {}", clinicaCount);
+            
+            if (clinicaCount > 0) {
+                logger.info("⏭️ Dados já existem, pulando criação de dados iniciais");
                 return;
             }
+            
+            logger.info("🚀 Criando dados iniciais...");
             criarDadosIniciais();
+            logger.info("✅ DataSeeder executado com sucesso!");
+            
         } catch (Exception e) {
-            logger.error("❌ Erro ao executar seeder: {}", e.getMessage());
+            logger.error("❌ Erro ao executar seeder: {}", e.getMessage(), e);
             logger.warn("⚠️ Aplicação continuará sem dados iniciais");
         }
     }
 
     private void criarDadosIniciais() {
+        logger.info("📝 Criando tipos de usuário...");
 
         // 1. Criar Tipos de Usuário
         TipoUser tipoAdmin = TipoUser.builder()
@@ -217,6 +229,7 @@ public class DataSeeder implements CommandLineRunner {
         psicologoTeste = psicologoRepository.save(psicologoTeste);
 
         // 6. Criar Usuários de Teste
+        logger.info("👤 Criando usuário admin...");
         Usuario usuarioAdmin = Usuario.builder()
             .username("admin")
             .clinica(clinicaAdmin)
@@ -232,6 +245,7 @@ public class DataSeeder implements CommandLineRunner {
             .cargo("Administrador")
             .build();
         usuarioAdmin = usuarioRepository.save(usuarioAdmin);
+        logger.info("✅ Usuário admin criado: username=admin, senha=admin");
 
         Usuario usuarioTeste = Usuario.builder()
             .username("teste")
