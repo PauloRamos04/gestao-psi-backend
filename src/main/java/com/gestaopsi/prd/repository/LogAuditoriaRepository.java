@@ -14,6 +14,14 @@ import java.util.List;
 @Repository
 public interface LogAuditoriaRepository extends JpaRepository<LogAuditoria, Long> {
     
+    // Buscar todos ordenado por data/hora descendente (mais recentes primeiro)
+    @Query("SELECT l FROM LogAuditoria l ORDER BY l.dataHora DESC")
+    Page<LogAuditoria> findAllOrderByDataHoraDesc(Pageable pageable);
+    
+    // Buscar todos ordenado por data/hora ascendente (mais antigos primeiro)
+    @Query("SELECT l FROM LogAuditoria l ORDER BY l.dataHora ASC")
+    Page<LogAuditoria> findAllOrderByDataHoraAsc(Pageable pageable);
+    
     // Buscar por usuário
     Page<LogAuditoria> findByUsuarioIdOrderByDataHoraDesc(Long usuarioId, Pageable pageable);
     

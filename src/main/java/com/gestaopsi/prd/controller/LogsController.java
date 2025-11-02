@@ -27,9 +27,23 @@ public class LogsController {
     @Operation(summary = "Listar todos os logs com paginação")
     public ResponseEntity<Page<LogAuditoria>> listarTodos(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "50") int size
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false, defaultValue = "DESC") String order
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable;
+        if (sort != null && !sort.isEmpty()) {
+            // Ordenação customizada
+            org.springframework.data.domain.Sort.Direction direction = 
+                "ASC".equalsIgnoreCase(order) ? 
+                    org.springframework.data.domain.Sort.Direction.ASC : 
+                    org.springframework.data.domain.Sort.Direction.DESC;
+            pageable = PageRequest.of(page, size, org.springframework.data.domain.Sort.by(direction, sort));
+        } else {
+            // Por padrão, ordena por dataHora DESC
+            pageable = PageRequest.of(page, size, org.springframework.data.domain.Sort.by(
+                org.springframework.data.domain.Sort.Direction.DESC, "dataHora"));
+        }
         return ResponseEntity.ok(logService.buscarTodos(pageable));
     }
 

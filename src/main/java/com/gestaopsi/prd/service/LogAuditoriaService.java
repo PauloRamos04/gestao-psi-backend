@@ -129,10 +129,16 @@ public class LogAuditoriaService {
     }
 
     /**
-     * Buscar todos logs com paginação
+     * Buscar todos logs com paginação e ordenação
      */
     public Page<LogAuditoria> buscarTodos(Pageable pageable) {
-        return logRepository.findAll(pageable);
+        // Verifica se há ordenação personalizada
+        if (pageable.getSort().isSorted()) {
+            // Se já tem ordenação, usa findAll padrão
+            return logRepository.findAll(pageable);
+        }
+        // Por padrão, ordena por data/hora descendente (mais recentes primeiro)
+        return logRepository.findAllOrderByDataHoraDesc(pageable);
     }
 
     /**
