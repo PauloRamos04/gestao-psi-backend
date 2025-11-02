@@ -56,15 +56,58 @@ public class PsicologoService {
             psicologLogin = gerarLoginAutomatico(request.getNome());
         }
         
-        Psicologo psicologo = Psicologo.builder()
+        Psicologo.PsicologoBuilder builder = Psicologo.builder()
                 .psicologLogin(psicologLogin)
                 .nome(request.getNome())
                 .crp(request.getCrp())
                 .email(request.getEmail())
                 .telefone(request.getTelefone())
                 .dtAtivacao(request.getDtAtivacao() != null ? request.getDtAtivacao() : LocalDate.now())
-                .categoria(categoria)
-                .build();
+                .categoria(categoria);
+        
+        // Documentos
+        if (request.getCpf() != null) builder.cpf(request.getCpf());
+        if (request.getRg() != null) builder.rg(request.getRg());
+        
+        // Contato
+        if (request.getCelular() != null) builder.celular(request.getCelular());
+        if (request.getTelefoneEmergencia() != null) builder.telefoneEmergencia(request.getTelefoneEmergencia());
+        if (request.getContatoEmergenciaNome() != null) builder.contatoEmergenciaNome(request.getContatoEmergenciaNome());
+        
+        // Dados Pessoais
+        if (request.getDataNascimento() != null) builder.dataNascimento(request.getDataNascimento());
+        if (request.getGenero() != null) builder.genero(request.getGenero());
+        if (request.getEstadoCivil() != null) builder.estadoCivil(request.getEstadoCivil());
+        if (request.getNacionalidade() != null) builder.nacionalidade(request.getNacionalidade());
+        
+        // Endereço
+        if (request.getCep() != null) builder.cep(request.getCep());
+        if (request.getLogradouro() != null) builder.logradouro(request.getLogradouro());
+        if (request.getNumeroEndereco() != null) builder.numeroEndereco(request.getNumeroEndereco());
+        if (request.getComplemento() != null) builder.complemento(request.getComplemento());
+        if (request.getBairro() != null) builder.bairro(request.getBairro());
+        if (request.getCidade() != null) builder.cidade(request.getCidade());
+        if (request.getEstado() != null) builder.estado(request.getEstado());
+        
+        // Formação
+        if (request.getFormacaoAcademica() != null) builder.formacaoAcademica(request.getFormacaoAcademica());
+        if (request.getEspecializacoes() != null) builder.especializacoes(request.getEspecializacoes());
+        if (request.getAbordagemTerapeutica() != null) builder.abordagemTerapeutica(request.getAbordagemTerapeutica());
+        if (request.getAreasAtuacao() != null) builder.areasAtuacao(request.getAreasAtuacao());
+        if (request.getAnosExperiencia() != null) builder.anosExperiencia(request.getAnosExperiencia());
+        if (request.getUniversidadeFormacao() != null) builder.universidadeFormacao(request.getUniversidadeFormacao());
+        if (request.getAnoFormacao() != null) builder.anoFormacao(request.getAnoFormacao());
+        
+        // Profissional
+        if (request.getDuracaoSessaoMinutos() != null) builder.duracaoSessaoMinutos(request.getDuracaoSessaoMinutos());
+        if (request.getAceitaConvenio() != null) builder.aceitaConvenio(request.getAceitaConvenio());
+        if (request.getConveniosAceitos() != null) builder.conveniosAceitos(request.getConveniosAceitos());
+        if (request.getObservacoes() != null) builder.observacoes(request.getObservacoes());
+        if (request.getBio() != null) builder.bio(request.getBio());
+        if (request.getFotoUrl() != null) builder.fotoUrl(request.getFotoUrl());
+        if (request.getAtivo() != null) builder.ativo(request.getAtivo());
+        
+        Psicologo psicologo = builder.build();
         
         psicologo = psicologoRepository.save(psicologo);
         
@@ -147,13 +190,46 @@ public class PsicologoService {
                     }
                     
                     psicologo.setNome(request.getNome());
+                    if (request.getCpf() != null) psicologo.setCpf(request.getCpf());
+                    if (request.getRg() != null) psicologo.setRg(request.getRg());
                     psicologo.setCrp(request.getCrp());
                     psicologo.setEmail(request.getEmail());
                     psicologo.setTelefone(request.getTelefone());
+                    if (request.getCelular() != null) psicologo.setCelular(request.getCelular());
+                    if (request.getTelefoneEmergencia() != null) psicologo.setTelefoneEmergencia(request.getTelefoneEmergencia());
+                    if (request.getContatoEmergenciaNome() != null) psicologo.setContatoEmergenciaNome(request.getContatoEmergenciaNome());
+                    
+                    if (request.getDataNascimento() != null) psicologo.setDataNascimento(request.getDataNascimento());
+                    if (request.getGenero() != null) psicologo.setGenero(request.getGenero());
+                    if (request.getEstadoCivil() != null) psicologo.setEstadoCivil(request.getEstadoCivil());
+                    if (request.getNacionalidade() != null) psicologo.setNacionalidade(request.getNacionalidade());
+                    
+                    if (request.getCep() != null) psicologo.setCep(request.getCep());
+                    if (request.getLogradouro() != null) psicologo.setLogradouro(request.getLogradouro());
+                    if (request.getNumeroEndereco() != null) psicologo.setNumeroEndereco(request.getNumeroEndereco());
+                    if (request.getComplemento() != null) psicologo.setComplemento(request.getComplemento());
+                    if (request.getBairro() != null) psicologo.setBairro(request.getBairro());
+                    if (request.getCidade() != null) psicologo.setCidade(request.getCidade());
+                    if (request.getEstado() != null) psicologo.setEstado(request.getEstado());
+                    
+                    if (request.getFormacaoAcademica() != null) psicologo.setFormacaoAcademica(request.getFormacaoAcademica());
+                    if (request.getEspecializacoes() != null) psicologo.setEspecializacoes(request.getEspecializacoes());
+                    if (request.getAbordagemTerapeutica() != null) psicologo.setAbordagemTerapeutica(request.getAbordagemTerapeutica());
+                    if (request.getAreasAtuacao() != null) psicologo.setAreasAtuacao(request.getAreasAtuacao());
+                    if (request.getAnosExperiencia() != null) psicologo.setAnosExperiencia(request.getAnosExperiencia());
+                    if (request.getUniversidadeFormacao() != null) psicologo.setUniversidadeFormacao(request.getUniversidadeFormacao());
+                    if (request.getAnoFormacao() != null) psicologo.setAnoFormacao(request.getAnoFormacao());
                     
                     if (request.getDtAtivacao() != null) {
                         psicologo.setDtAtivacao(request.getDtAtivacao());
                     }
+                    if (request.getDuracaoSessaoMinutos() != null) psicologo.setDuracaoSessaoMinutos(request.getDuracaoSessaoMinutos());
+                    if (request.getAceitaConvenio() != null) psicologo.setAceitaConvenio(request.getAceitaConvenio());
+                    if (request.getConveniosAceitos() != null) psicologo.setConveniosAceitos(request.getConveniosAceitos());
+                    if (request.getObservacoes() != null) psicologo.setObservacoes(request.getObservacoes());
+                    if (request.getBio() != null) psicologo.setBio(request.getBio());
+                    if (request.getFotoUrl() != null) psicologo.setFotoUrl(request.getFotoUrl());
+                    if (request.getAtivo() != null) psicologo.setAtivo(request.getAtivo());
                     
                     if (request.getCategoriaId() != null) {
                         Categoria categoria = categoriaRepository.findById(request.getCategoriaId())
