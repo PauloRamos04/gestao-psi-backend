@@ -16,3 +16,4 @@ public interface InteracaoSugestaoRepository extends JpaRepository<InteracaoSuge
 
 
 
+
