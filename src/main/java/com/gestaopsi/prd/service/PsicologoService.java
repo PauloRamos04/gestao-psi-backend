@@ -33,9 +33,11 @@ public class PsicologoService {
     private final TipoUserRepository tipoUserRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional(readOnly = true)
     public List<Psicologo> listAll() {
         log.info("Listando todos os psicólogos");
-        return psicologoRepository.findAll();
+        // Usar fetch join para evitar LazyInitializationException
+        return psicologoRepository.findAllWithCategoria();
     }
 
     public Optional<Psicologo> findByLogin(String login) {
