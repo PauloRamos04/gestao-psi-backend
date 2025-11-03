@@ -37,14 +37,16 @@ public class SalaService {
     @Cacheable(value = "salas", key = "#clinicaId")
     public List<Sala> listarPorClinica(Long clinicaId) {
         log.info("Listando salas - Clinica: {} (sem cache)", clinicaId);
-        return salaRepository.findByClinicaId(clinicaId.intValue());
+        // Usar fetch join para evitar LazyInitializationException
+        return salaRepository.findByClinicaId(clinicaId);
     }
 
     @Transactional(readOnly = true)
     @Cacheable(value = "salas", key = "'ativas_' + #clinicaId")
     public List<Sala> listarSalasAtivas(Long clinicaId) {
         log.info("Listando salas ativas - Clinica: {} (sem cache)", clinicaId);
-        return salaRepository.findByClinicaId(clinicaId.intValue())
+        // Usar fetch join para evitar LazyInitializationException
+        return salaRepository.findByClinicaId(clinicaId)
             .stream()
             .filter(Sala::getAtiva)
             .collect(Collectors.toList());
@@ -53,7 +55,8 @@ public class SalaService {
     @Transactional(readOnly = true)
     @Cacheable(value = "salas", key = "'sala_' + #id")
     public Optional<Sala> buscarPorId(Long id) {
-        return salaRepository.findById(id);
+        // Usar fetch join para evitar LazyInitializationException
+        return salaRepository.findByIdWithRelations(id);
     }
 
     @Transactional
