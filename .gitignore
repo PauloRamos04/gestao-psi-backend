@@ -36,3 +36,4 @@ env.prd
 env.dev
 env
 .env-railway
+DATABASE_SCHEMA.md

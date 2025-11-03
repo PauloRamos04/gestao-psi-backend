@@ -8,14 +8,28 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * DTO para requisição de criação/atualização de psicólogo.
+ * 
+ * IMPORTANTE: O campo categoriaId é obrigatório e deve ser fornecido pelo frontend.
+ * 
+ * Se os campos username e senha forem fornecidos, um usuário será criado automaticamente
+ * para o psicólogo. Caso contrário, apenas o psicólogo será criado.
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PsicologoRequest {
     
-    private String psicologLogin; // Identificador interno (opcional)
+    /**
+     * Login interno do psicólogo (opcional - será gerado automaticamente se não fornecido)
+     */
+    private String psicologLogin;
     
+    /**
+     * Nome completo do psicólogo (obrigatório)
+     */
     @NotBlank(message = "Nome do psicólogo é obrigatório")
     @Size(min = 3, max = 200)
     private String nome;
@@ -116,12 +130,29 @@ public class PsicologoRequest {
     
     private Boolean ativo;
     
+    /**
+     * ID da categoria do psicólogo (OBRIGATÓRIO)
+     * Use o endpoint GET /categorias para obter a lista de categorias disponíveis
+     */
     @NotNull(message = "ID da categoria é obrigatório")
     private Long categoriaId;
     
-    // Dados para criar usuário automaticamente (opcional)
-    private String username; // Se fornecido, cria usuário automaticamente
-    private String senha; // Senha do usuário (se criar usuário)
-    private Long tipoUserId; // Tipo do usuário (se criar usuário)
+    /**
+     * Username para criar usuário automaticamente (opcional)
+     * Se fornecido junto com senha, um usuário será criado automaticamente para o psicólogo
+     */
+    private String username;
+    
+    /**
+     * Senha para criar usuário automaticamente (opcional)
+     * Deve ser fornecida junto com username para criar usuário automaticamente
+     */
+    private String senha;
+    
+    /**
+     * ID do tipo de usuário (opcional)
+     * Se não fornecido, será usado o tipo padrão "PSICOLOGO"
+     */
+    private Long tipoUserId;
 }
 

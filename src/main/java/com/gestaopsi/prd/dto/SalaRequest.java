@@ -6,12 +6,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO para requisição de criação/atualização de sala.
+ * 
+ * IMPORTANTE: O campo clinicaId é obrigatório e deve ser fornecido pelo frontend.
+ * O frontend deve permitir a seleção da clínica no formulário de cadastro de salas.
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SalaRequest {
     
+    /**
+     * ID da clínica (OBRIGATÓRIO - deve ser selecionado no formulário de cadastro)
+     * Use o endpoint GET /clinicas para obter a lista de clínicas disponíveis
+     */
     @NotNull(message = "ID da clínica é obrigatório")
     private Long clinicaId;
     
