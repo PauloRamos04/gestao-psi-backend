@@ -210,9 +210,11 @@ public class SalaService {
     /**
      * Lista salas de um psicólogo específico (sala preferencial/responsável)
      */
+    @Transactional(readOnly = true)
     public List<Sala> listarSalasPorPsicologo(Long psicologoId) {
         log.info("Listando salas do psicólogo: {}", psicologoId);
-        return salaRepository.findAll().stream()
+        // Usar fetch join para evitar LazyInitializationException
+        return salaRepository.findAllWithRelations().stream()
             .filter(sala -> sala.getPsicologoResponsavel() != null && 
                            sala.getPsicologoResponsavel().getId().equals(psicologoId))
             .collect(Collectors.toList());
@@ -221,6 +223,7 @@ public class SalaService {
     /**
      * Busca sala preferencial/padrão do psicólogo
      */
+    @Transactional(readOnly = true)
     public Optional<Sala> buscarSalaPreferencialPsicologo(Long psicologoId) {
         log.info("Buscando sala preferencial do psicólogo: {}", psicologoId);
         List<Sala> salas = listarSalasPorPsicologo(psicologoId);

@@ -24,6 +24,13 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
      */
     @Query("SELECT DISTINCT s FROM Sala s LEFT JOIN FETCH s.clinica LEFT JOIN FETCH s.psicologoResponsavel WHERE s.id = :id")
     Optional<Sala> findByIdWithRelations(@Param("id") Long id);
+    
+    /**
+     * Busca todas as salas com relacionamentos carregados (JOIN FETCH)
+     * para evitar LazyInitializationException ao serializar para JSON
+     */
+    @Query("SELECT DISTINCT s FROM Sala s LEFT JOIN FETCH s.clinica LEFT JOIN FETCH s.psicologoResponsavel")
+    List<Sala> findAllWithRelations();
 }
 
 
